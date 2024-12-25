@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CarController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,4 +15,11 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+});
+Route::middleware(['auth'])->group(function () {
+    // Car routes
+    Route::resource('cars', CarController::class)->except('show');
+    Route::get('/cars/create', [CarController::class, 'create'])->name('cars.create');
+
+    Route::get('cars/{id}', [CarController::class, 'show'])->name('cars.show'); // Show car details
 });

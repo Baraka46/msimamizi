@@ -51,6 +51,76 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+    // In User.php model
+
+// Checking if the user is an Admin
+public function isAdmin()
+{
+    return $this->role === 'admin' && is_null($this->company_id);
+}
+
+// Checking if the user is an Owner
+public function isOwner()
+{
+    return $this->role === 'owner' && !is_null($this->company_id);
+}
+
+// Method for Admins to access all companies
+public function allCompanies()
+{
+    // Admin can access all companies but cannot perform owner-specific tasks
+    if ($this->isAdmin()) {
+        return Company::all(); // Admin gets all companies
+    }
+
+    return null; // Non-admin users don't have access to all companies
+}
+
+// Method for Owners to access their own company
+public function ownCompany()
+{
+    // Only owners can access their own company, based on company_id
+    if ($this->isOwner()) {
+        return Company::find($this->company_id); // Owner can only access their own company
+    }
+
+    return null; // Non-owner users don't have access to a specific company
+}
+
+// Method to assign a supervisor (Owner-specific functionality)
+public function assignSupervisorToCar($supervisorData, $carId)
+{
+    if ($this->isOwner()) {
+        // Add supervisor details to the car in their company
+        $supervisor = new Supervisor($supervisorData);
+        $supervisor->car_id = $carId;
+        $supervisor->save();
+
+        // Send a temporary password to the supervisor via email
+        // Assuming Supervisor has an email and password field
+        $supervisor->sendTemporaryPassword();
+
+        return $supervisor;
+    }
+
+    return null; // Admin cannot assign supervisors
+}
+
+// Method to set the Hesabu rate (Owner-specific functionality)
+public function setHesabuRate($rate)
+{
+    if ($this->isOwner()) {
+        // Set the Hesabu rate for the owner's company
+        $company = $this->ownCompany(); // Get the owner's company
+        $company->hesabu_rate = $rate;
+        $company->save();
+
+        return $company;
+    }
+
+    return null; // Admin cannot set Hesabu rate
+}
+
 
     /**
      * Get the attributes that should be cast.
