@@ -112,10 +112,15 @@ class CarController extends Controller
     /**
      * Remove the specified car
      */
-    public function destroy(Car $car)
-    {
-        $car->delete();
-
-        return redirect()->route('cars.index')->with('success', 'Car deleted successfully.');
+    public function destroy($id)
+{
+    $car = Car::findOrFail($id);
+    // Check if the authenticated user is the owner
+    if (auth()->user()->id !== $car->company_id) {
+        return redirect()->route('cars.index')->with('error', 'Unauthorized action');
     }
+
+    $car->delete();
+    return redirect()->route('cars.index')->with('success', 'Car deleted successfully');
+}
 }

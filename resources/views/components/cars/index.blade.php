@@ -69,17 +69,19 @@
             </div>
             <div class="flex justify-end space-x-3">
                 <a id="viewLink" href="#" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">View</a>
-                <a id="editLink" href="#" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">Edit</a>
-                <form id="deleteForm" action="#" method="POST" class="inline-block">
-    @csrf
-    @method('DELETE')
-    <button 
-        type="submit" 
-        class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition" 
-        onclick="return confirm('Are you sure?')">
-        Delete
-    </button>
-</form>
+                
+                <!-- Show Edit and Delete buttons only if the user is the owner -->
+                <a id="editLink" href="#" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition hidden">Edit</a>
+                <form id="deleteForm" action="#" method="POST" class="inline-block hidden">
+                    @csrf
+                    @method('DELETE')
+                    <button 
+                        type="submit" 
+                        class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition" 
+                        onclick="return confirm('Are you sure?')">
+                        Delete
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -93,9 +95,21 @@
             document.getElementById('modalRoute').innerText = car.route;
             document.getElementById('modalTarget').innerText = car.daily_hesabu_target;
 
+            // Update links for View, Edit, and Delete
             document.getElementById('viewLink').href = `{{ url('/cars') }}/${car.id}`;
-    document.getElementById('editLink').href = `{{ url('/cars') }}/${car.id}/edit`;
-    document.getElementById('deleteForm').action = `{{ url('/cars') }}/${car.id}`;
+            document.getElementById('editLink').href = `{{ url('/cars') }}/${car.id}/edit`;
+            document.getElementById('deleteForm').action = `{{ url('/cars') }}/${car.id}`;
+
+            // Show the Edit and Delete buttons if the user is the owner
+            if ({{ auth()->user()->id }} === car.company_id) {
+                document.getElementById('editLink').classList.remove('hidden');
+                document.getElementById('deleteForm').classList.remove('hidden');
+            } else {
+                document.getElementById('editLink').classList.add('hidden');
+                document.getElementById('deleteForm').classList.add('hidden');
+            }
+
+            // Display the modal
             document.getElementById('carModal').classList.remove('hidden');
         }
 
@@ -110,4 +124,3 @@
         });
     </script>
 </x-app-layout>
-

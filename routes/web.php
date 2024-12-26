@@ -23,3 +23,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('cars/{id}', [CarController::class, 'show'])->name('cars.show'); // Show car details
 });
+// web.php
+
+// web.php
+
+Route::middleware(['auth', 'role:owner'])->group(function () {
+    Route::get('/users/create-supervisor', [UserController::class, 'createSupervisorForm'])->name('users.create.supervisor');
+    Route::post('/users/create-supervisor', [UserController::class, 'createSupervisor'])->name('users.store.supervisor');
+});
