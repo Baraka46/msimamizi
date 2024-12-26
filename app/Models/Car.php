@@ -33,6 +33,7 @@ class Car extends Model
     {
         return $this->belongsTo(User::class, 'assigned_supervisor_id');
     }
+    
 
     /**
      * Scope to restrict car access to the owner of the company.

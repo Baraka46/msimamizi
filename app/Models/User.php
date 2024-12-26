@@ -64,6 +64,11 @@ public function isOwner()
 {
     return $this->role === 'owner' && !is_null($this->company_id);
 }
+public function isSupervisor()
+{
+    // Assuming you have a `role` column that contains the user's role
+    return $this->role === 'supervisor'&& !is_null($this->company_id);
+}
 
 // Method for Admins to access all companies
 public function allCompanies()

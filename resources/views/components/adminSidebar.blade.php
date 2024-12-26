@@ -2,11 +2,11 @@
 <div x-data="{ isSidebarOpen: window.innerWidth >= 1024 }" class="relative">
     <!-- Sidebar Button (Visible only on small screens) -->
     <div 
-        :class="isSidebarOpen ? 'lg:hidden absolute top-8 left-64' : 'lg:hidden absolute top-8 left-4'" 
+        :class="isSidebarOpen ? 'lg:hidden absolute top-4 left-64' : 'lg:hidden absolute top-4 left-4'" 
         class="transition-all duration-300 ease-in-out z-50">
         <button 
             @click="isSidebarOpen = !isSidebarOpen" 
-            class= text-black p-3 rounded-full">
+            class="text-black p-3 rounded-full">
             <i :class="isSidebarOpen ? 'fas fa-times' : 'fas fa-bars'" class="text-2xl"></i>
         </button>
     </div>
@@ -19,7 +19,7 @@
         <!-- Logo Section -->
          <div>
         <div class="logo mb-10">
-            <h2 class="text-3xl font-bold text-center">TransportHub</h2>
+            <h2 class="text-3xl font-bold text-center">Transport Hub admin</h2>
        
 
         <!-- User Profile (Optional) -->

@@ -16,21 +16,31 @@ class CarController extends Controller
      * Show the list of cars for the logged-in user
      */
     public function index()
-    {
-        $user = auth()->user();
+{
+    $user = auth()->user();
 
-        // Admin and Owner can see their cars
-        if ($user->isOwner() || $user->isAdmin()) {
-            $cars = Car::when($user->isOwner(), function ($query) use ($user) {
-                // Restrict access for owners to only their own company
-                $query->forOwner($user);
-            })->get();
-          
-            return view('components.cars.index', compact('cars'));
-        }
+    // Admin and Owner can see their cars
+    if ($user->isOwner() || $user->isAdmin()) {
+        $cars = Car::when($user->isOwner(), function ($query) use ($user) {
+            // Restrict access for owners to only their own company
+            $query->forOwner($user);
+        })->get();
 
-        return redirect()->route('dashboard')->with('error', 'Unauthorized');
+        return view('components.cars.index', compact('cars'));
     }
+
+    // Supervisors can see cars they are supervising
+    if ($user->isSupervisor()) {
+        $cars = Car::where('assigned_supervisor_id', $user->id)->get();
+
+        return view('components.cars.index', compact('cars'));
+    }
+
+    // If the user doesn't match any role, redirect to dashboard
+    return redirect()->route('dashboard')->with('error', 'Unauthorized');
+}
+
+
 
     /**
      * Show the form for creating a new car

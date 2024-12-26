@@ -12,7 +12,6 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
-
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -21,24 +20,36 @@
     </head>
     <body class="font-sans antialiased">
 
-    
         <x-banner />
 
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen">
             @livewire('navigation-menu')
 
-            <!-- Page Heading -->
-           
+            <!-- Page Layout -->
             <div class="flex">
-                <!-- Sidebar with background color -->
-                
-                    @include('components.sidebar')
-               
-            <!-- Page Content -->
-            <main>
-           
+                <!-- Sidebar -->
+                <div class="w-50 md:w-64 bg-gray-800 text-white h-screen">
+    @switch(Auth::user()->role)
+        @case('owner')
+            @include('components.ownerSidebar')
+            @break
 
-            </main>
+        @case('supervisor')
+            @include('components.supervisorSidebar')
+            @break
+
+        @case('admin')
+            @include('components.adminSidebar')
+            @break
+    @endswitch
+</div>
+
+
+                <!-- Main Content -->
+                <main class="flex-1 p-6 mt-4">
+                    {{ $slot }} 
+                </main>
+            </div>
         </div>
 
         @stack('modals')
