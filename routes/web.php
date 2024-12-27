@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,6 +17,7 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
 Route::middleware(['auth'])->group(function () {
     // Car routes
     Route::resource('cars', CarController::class)->except('show');
@@ -27,7 +29,15 @@ Route::middleware(['auth'])->group(function () {
 
 // web.php
 
-Route::middleware(['auth', 'role:owner'])->group(function () {
-    Route::get('/users/create-supervisor', [UserController::class, 'createSupervisorForm'])->name('users.create.supervisor');
-    Route::post('/users/create-supervisor', [UserController::class, 'createSupervisor'])->name('users.store.supervisor');
+// web.php
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/supervisors', [UserController::class, 'index'])->name('supervisors.index'); // List supervisors
+    Route::get('/supervisors/create', [UserController::class, 'create'])->name('supervisors.create'); // Create form
+    Route::post('/supervisors', [UserController::class, 'store'])->name('supervisors.store'); // Store supervisor
+    Route::patch('/supervisors/{id}/disable', [UserController::class, 'disableSupervisor'])->name('supervisors.disable');
+    Route::patch('/supervisors/{id}/enable', [UserController::class, 'enableSupervisor'])->name('supervisors.enable');
+
 });

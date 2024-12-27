@@ -28,7 +28,7 @@
             <!-- Page Layout -->
             <div class="flex">
                 <!-- Sidebar -->
-                <div class="w-50 md:w-64 bg-gray-800 text-white h-screen">
+                <div class="w-50 md:w-64 bg-gray-100 text-white h-screen">
     @switch(Auth::user()->role)
         @case('owner')
             @include('components.ownerSidebar')
@@ -37,6 +37,11 @@
         @case('supervisor')
             @include('components.supervisorSidebar')
             @break
+
+            @case('user')
+            @include('components.userSidebar')
+            @break
+
 
         @case('admin')
             @include('components.adminSidebar')
