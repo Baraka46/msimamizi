@@ -1,5 +1,9 @@
 <!-- Sidebar Section -->
+
 <div x-data="{ isSidebarOpen: window.innerWidth >= 1024 }" class="relative">
+
+
+
     <!-- Sidebar Button (Visible only on small screens) -->
     <div 
         :class="isSidebarOpen ? 'lg:hidden absolute top-4 left-64' : 'lg:hidden absolute top-4 left-4'" 
@@ -76,12 +80,34 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li>
-                <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
-                    <i class="fas fa-bus"></i>
-                    <span>Bus Management</span>
-                </a>
-            </li>
+            <li class="relative">
+    <!-- Main Dropdown Toggle -->
+    <a href="#" 
+       onclick="toggleDropdown(event)" 
+       class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
+        <i class="fas fa-bus"></i>
+        <span>Bus Management</span>
+        <i class="fas fa-chevron-down ml-auto"></i>
+    </a>
+
+    <!-- Dropdown Items -->
+    <ul id="dropdown-menu" 
+        class="hidden flex flex-col space-y-1 pl-8 mt-2">
+        <li>
+            <a href="{{ route('supervisors.index') }}" 
+               class="block px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
+                Supervisor
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('cars.index') }}" 
+               class="block px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
+                Bus
+            </a>
+        </li>
+    </ul>
+</li>
+
             <li>
                 <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
                     <i class="fas fa-wallet"></i>
