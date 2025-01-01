@@ -57,75 +57,78 @@
 
     <!-- Modal -->
     <div id="supervisorModal" class="fixed inset-0 z-50 hidden bg-gray-800 bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-lg w-96 p-6">
-            <h2 id="modalTitle" class="text-lg font-bold mb-4">Supervisor Details</h2>
-            <div id="modalContent" class="mb-4">
-                <p><strong>Name:</strong> <span id="modalName"></span></p>
-                <p><strong>Email:</strong> <span id="modalEmail"></span></p>
-                <p><strong>Contact:</strong> <span id="modalContact"></span></p>
-                <p><strong>Address:</strong> <span id="modalAddress"></span></p>
-            </div>
-            <div class="flex justify-end space-x-3">
-    <!-- Disable Button -->
-    @foreach($supervisors as $supervisor)
-    <form method="POST" action="{{ route('supervisors.disable', ['id' => $supervisor->id]) }}" id="disableForm">
-        @csrf
-        @method('PATCH')
-        <button type="submit" 
-                class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-                onclick="return confirm('Are you sure  you want to diable this supervisor?')">
-                
-            Disable
-        </button>
-    </form>
-    @endforeach
-
-    <!-- Edit Info Button -->
-    <a id="editLink" href="#" 
-       class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
-        Edit Info
-    </a>
-</div>
-<button onclick="closeModal()" 
-        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
-    Close
-</button>
-
+    <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+        <h2 id="modalTitle" class="text-lg font-bold mb-4">Supervisor Details</h2>
+        <div id="modalContent" class="mb-4">
+            <p><strong>Name:</strong> <span id="modalName"></span></p>
+            <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+            <p><strong>Contact:</strong> <span id="modalContact"></span></p>
+            <p><strong>Address:</strong> <span id="modalAddress"></span></p>
         </div>
+        <div class="flex justify-end space-x-3">
+            <!-- Disable Button (Only for the selected supervisor) -->
+            <form id="disableForm" method="POST" action="" class="hidden">
+                @csrf
+                @method('PATCH')
+                <button type="submit" 
+                        class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+                        onclick="return confirm('Are you sure you want to disable this supervisor?')">
+                    Disable
+                </button>
+            </form>
+
+            <!-- Edit Info Button -->
+            <a id="editLink" href="#" 
+               class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+                Edit Info
+            </a>
+        </div>
+        <button onclick="closeModal()" 
+                class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+            Close
+        </button>
     </div>
+</div>
+
 
     <!-- Script -->
     <script>
-        let currentSupervisor = null;
+let currentSupervisor = null;
 
-        function openModal(supervisor) {
-            currentSupervisor = supervisor;
+function openModal(supervisor) {
+    currentSupervisor = supervisor;
 
-            // Update modal content
-            document.getElementById('modalTitle').innerText = `Supervisor Details - ${supervisor.name}`;
-            document.getElementById('modalName').innerText = supervisor.name;
-            document.getElementById('modalEmail').innerText = supervisor.email;
-            document.getElementById('modalContact').innerText = supervisor.phone_number;
-            document.getElementById('modalAddress').innerText = supervisor.address;
+    // Update modal content
+    document.getElementById('modalTitle').innerText = `Supervisor Details - ${supervisor.name}`;
+    document.getElementById('modalName').innerText = supervisor.name;
+    document.getElementById('modalEmail').innerText = supervisor.email;
+    document.getElementById('modalContact').innerText = supervisor.phone_number;
+    document.getElementById('modalAddress').innerText = supervisor.address;
 
-            // Update the links for Edit
-            document.getElementById('editLink').href = `/supervisors/${supervisor.id}/edit`;
+    // Update the links for Edit
+    document.getElementById('editLink').href = `/supervisors/${supervisor.id}/edit`;
 
-            // Display the modal
-            document.getElementById('supervisorModal').classList.remove('hidden');
-        }
+    // Update the Disable button's form action dynamically
+    document.getElementById('disableForm').action = `/supervisors/${supervisor.id}/disable`;
 
-        function closeModal() {
-            document.getElementById('supervisorModal').classList.add('hidden');
-        }
+    // Show the Disable button in the modal
+    document.getElementById('disableForm').classList.remove('hidden');
 
-        window.addEventListener('click', function (e) {
-            if (e.target.id === 'supervisorModal') {
-                closeModal();
-            }
-        });
+    // Display the modal
+    document.getElementById('supervisorModal').classList.remove('hidden');
+}
 
-        // Disable Supervisor Function
+function closeModal() {
+    document.getElementById('supervisorModal').classList.add('hidden');
+    document.getElementById('disableForm').classList.add('hidden'); // Hide the form when closing the modal
+}
+
+window.addEventListener('click', function (e) {
+    if (e.target.id === 'supervisorModal') {
+        closeModal();
+    }
+});
+
         
     </script>
     <!-- Disabled Supervisors Section -->

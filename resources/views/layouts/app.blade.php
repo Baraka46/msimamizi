@@ -19,6 +19,14 @@
         @livewireStyles
     </head>
     <body class="font-sans antialiased">
+        <script>
+function toggleDropdown(event) {
+    event.preventDefault();
+    const dropdown = document.getElementById('dropdown-menu');
+    dropdown.classList.toggle('hidden');
+}
+
+        </script>
 
         <x-banner />
 
