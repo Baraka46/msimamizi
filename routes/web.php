@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RegistrationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -42,3 +43,8 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/supervisors/{id}/enable', [UserController::class, 'enableSupervisor'])->name('supervisors.enable');
 
 });
+
+
+Route::get('/company/register', [RegistrationController::class, 'showForm'])->name('register.form');
+Route::post('/register/user', [RegistrationController::class, 'registerUser'])->name('register.user');
+Route::post('/company/register', [RegistrationController::class, 'registerCompanyAndUser'])->name('register.company');
