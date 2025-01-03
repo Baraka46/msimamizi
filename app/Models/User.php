@@ -93,6 +93,10 @@ public function ownCompany()
 
     return null; // Non-owner users don't have access to a specific company
 }
+public function company()
+{
+    return $this->hasOne(Company::class);
+}
 
 // Method to assign a supervisor (Owner-specific functionality)
 public function assignSupervisorToCar($supervisorData, $carId)

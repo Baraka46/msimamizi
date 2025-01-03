@@ -1,31 +1,35 @@
 <x-app-layout>
-    <!-- Dashboard Content -->
     <div class="p-6">
-        <!-- Dashboard Header -->
+        <!-- Greeting Header -->
         <div class="bg-white shadow-md rounded-lg p-6 mb-6">
-            <h1 class="text-2xl font-bold">Dashboard</h1>
-            <p class="text-gray-600">Welcome back! Here's a summary of your data:</p>
+            <h1 class="text-2xl font-bold">Hello, {{ $user->name }}</h1>
+            <p class="text-gray-600"></p>
         </div>
 
-        <!-- Statistics Cards -->
+        <!-- Dashboard Content -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Total Cars -->
-            <div class="bg-blue-100 p-4 rounded-lg shadow-md">
-                <h2 class="text-lg font-semibold text-blue-800">Total Cars</h2>
-                <p class="text-3xl font-bold">25</p> <!-- Fake Data -->
-            </div>
-
-            <!-- Profit -->
-            <div class="bg-green-100 p-4 rounded-lg shadow-md">
-                <h2 class="text-lg font-semibold text-green-800">Total Profit</h2>
-                <p class="text-3xl font-bold">$12,500</p> <!-- Fake Data -->
-            </div>
-
-            <!-- Expenses -->
-            <div class="bg-red-100 p-4 rounded-lg shadow-md">
-                <h2 class="text-lg font-semibold text-red-800">Total Expenses</h2>
-                <p class="text-3xl font-bold">$3,200</p> <!-- Fake Data -->
-            </div>
+            @if($user->role === 'admin')
+                <!-- Admin Content -->
+                <div class="bg-blue-100 p-4 rounded-lg shadow-md">
+                    <h2 class="text-lg font-semibold text-blue-800">Manage Users</h2>
+                    <p class="text-3xl font-bold">150</p> <!-- Fake data -->
+                </div>
+            @elseif($user->role === 'supervisor')
+                <!-- Supervisor Content -->
+                <div class="bg-yellow-100 p-4 rounded-lg shadow-md">
+                    <h2 class="text-lg font-semibold text-yellow-800">Tasks Assigned</h2>
+                    <p class="text-3xl font-bold">12</p> <!-- Fake data -->
+                </div>
+            @elseif($user->role === 'owner')
+                <!-- Owner Content -->
+                 
+                <div class="bg-red-100 p-4 rounded-lg shadow-md">
+                    <h2 class="text-lg font-semibold text-red-800">Properties Managed</h2>
+                    <p class="text-3xl font-bold">5</p> <!-- Fake data -->
+                </div>
+            @else
+                <p class="text-red-500">Invalid role. Please contact the system administrator.</p>
+            @endif
         </div>
     </div>
 </x-app-layout>

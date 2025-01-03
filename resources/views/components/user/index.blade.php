@@ -132,13 +132,14 @@ window.addEventListener('click', function (e) {
         
     </script>
     <!-- Disabled Supervisors Section -->
-<div class="container mx-auto my-5 p-4 bg-white shadow rounded-lg">
+    <div class="container mx-auto my-5 p-4 bg-white shadow rounded-lg">
     <h1 class="text-2xl font-bold mb-6">Disabled Supervisors</h1>
     @if($disabledSupervisors->isEmpty())
         <p class="text-gray-500">No disabled supervisors available.</p>
     @else
+        <!-- Responsive Table -->
         <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-200">
+            <table class="min-w-full bg-white border border-gray-200 hidden md:table">
                 <thead>
                     <tr class="bg-gray-100 border-b">
                         <th class="text-left px-4 py-2">Name</th>
@@ -171,6 +172,30 @@ window.addEventListener('click', function (e) {
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile View -->
+        <div class="block md:hidden space-y-4">
+            @foreach($disabledSupervisors as $supervisor)
+                <div class="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+                    <p><strong>Name:</strong> {{ $supervisor->name }}</p>
+                    <p><strong>Email:</strong> {{ $supervisor->email }}</p>
+                    <p><strong>Contact:</strong> {{ ucfirst($supervisor->phone_number) }}</p>
+                    <p><strong>Address:</strong> {{ $supervisor->address }}</p>
+                    <div class="mt-3">
+                        <!-- Enable Button -->
+                        <form method="post" action="{{ route('supervisors.enable', ['id' => $supervisor->id]) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" 
+                                    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition w-full"
+                                    onclick="return confirm('Are you sure you want to enable this supervisor?')">
+                                Enable
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @endforeach
         </div>
     @endif
 </div>

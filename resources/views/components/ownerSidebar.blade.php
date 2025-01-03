@@ -87,24 +87,27 @@
        class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
         <i class="fas fa-bus"></i>
         <span>Bus Management</span>
-        <i class="fas fa-chevron-down ml-auto"></i>
+        <i class=""></i>
     </a>
 
     <!-- Dropdown Items -->
     <ul id="dropdown-menu" 
         class="hidden flex flex-col space-y-1 pl-8 mt-2">
         <li>
-            <a href="{{ route('supervisors.index') }}" 
-               class="block px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
-                Supervisor
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('cars.index') }}" 
-               class="block px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
-                Bus
-            </a>
-        </li>
+    <a href="{{ route('supervisors.index') }}" 
+       class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
+        <i class="fas fa-user mr-2"></i> <!-- Person Icon -->
+        Supervisor
+    </a>
+</li>
+<li>
+    <a href="{{ route('cars.index') }}" 
+       class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
+        <i class="fas fa-bus mr-2"></i> <!-- Bus Icon -->
+        Bus
+    </a>
+</li>
+
     </ul>
 </li>
 
