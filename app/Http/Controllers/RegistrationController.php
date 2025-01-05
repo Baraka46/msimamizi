@@ -61,7 +61,7 @@ class RegistrationController extends Controller
                 'role' => 'owner', // Set role to 'owner'
             ]);
          
-            return redirect()->route('login')->with('success', 'Company and Owner registered successfully.');
+            return redirect()->route('/')->with('success', 'Company and Owner registered successfully.');
         }
     }
     
