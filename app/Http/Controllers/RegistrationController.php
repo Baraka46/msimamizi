@@ -2,67 +2,67 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Company;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Password;
-
+use App\Models\Company;
+use App\Models\User;
 
 class RegistrationController extends Controller
 {
-    // Display the registration form
-    public function showForm()
+    public function showForm(Request $request)
     {
-        return view('components.company.create');
+        // Determine the step (default is 1)
+        $step = $request->query('step', 1);
+
+        // If step 2, fetch the company email passed in the query string
+        $companyEmail = $request->query('email', null);
+
+        return view('components.company.create', compact('step', 'companyEmail'));
     }
 
-
-    public function registerCompany(Request $request)
+    public function handleStep(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:15',
-            'email' => 'required|email|max:255|unique:companies,email',
-        ]);
-
-        $company = Company::create([
-            'name' => $request->name,
-            'address' => $request->address,
-            'phone_number' => $request->phone,
-            'email' => $request->email,
-        ]);
-
-        return response()->json(['success' => true, 'company_id' => $company->id]);
-    }
-
-    public function registerUser(Request $request)
-    {
-        $request->validate([
-            'company_id' => 'required|exists:companies,id',
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
-            'phone' => 'nullable|string|max:15',
-            'address' => 'nullable|string|max:255',
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone_number' => $request->phone,
-            'address' => $request->address,
-            'password' => Hash::make(Str::random(8)), // Temporary password
-            'role' => 'owner',
-            'company_id' => $request->company_id,
-        ]);
-
-        // Send email with temporary password (optional)
-
-        return response()->json(['success' => true]);
-    }
+        if ($request->input('step') == 1) {
+            // Step 1: Handle company registration
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:companies,email',
+                'address' => 'required|string|max:255',
+            ]);
     
+            // Create the company and ensure it is saved
+            $company = Company::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'address' => $validated['address'],
+            ]);
+           
+            // Redirect to step 2 with the company's ID
+            return redirect()->route('register.form', [
+                'step' => 2,
+                'company_id' => $company->id,
+            ]);
+        } elseif ($request->input('step') == 2) {
+            // Step 2: Handle owner registration
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:8|confirmed',
+                'company_id' => 'required|exists:companies,id', // Ensure the company ID exists
+            ]);
+    
+
+           
+            // Create the user and assign them the role of 'owner'
+            User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => bcrypt($validated['password']),
+                'company_id' => $validated['company_id'], // Assign company_id from the request
+                'role' => 'owner', // Set role to 'owner'
+            ]);
+         
+            return redirect()->route('login')->with('success', 'Company and Owner registered successfully.');
+        }
+    }
     
 }

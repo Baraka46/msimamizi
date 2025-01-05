@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::get('/company/register', [RegistrationController::class, 'showForm'])->name('register.form');
-Route::post('/register/user', [RegistrationController::class, 'registerUser'])->name('register.user');
-Route::post('/company/register', [RegistrationController::class, 'registerCompanyAndUser'])->name('register.company');
+Route::middleware(['web'])->group(function () {
+    Route::get('/company/register', [RegistrationController::class, 'showForm'])->name('register.form');
+    Route::post('/company/register', [RegistrationController::class, 'handleStep'])->name('register.handleStep');
+});
