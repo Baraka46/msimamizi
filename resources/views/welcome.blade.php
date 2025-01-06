@@ -41,14 +41,14 @@
                             </nav>
                             
        
-    
+                           
 
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-blue-500 via-blue-400 to-pink-200 text-white text-center py-20">
         <h1 class="text-5xl font-bold">Effortlessly Manage Your Transport Business</h1>
         <p class="mt-4 text-lg">Track daily income, manage expenses, and view weekly profits with ease.</p>
         <div class="mt-6">
-            <a href="#" class="bg-pink-500 hover:bg-pink-600 px-6 py-3 rounded shadow text-white">Get Started</a>
+            <a href="{{ url('/company/register') }}" class="bg-pink-500 hover:bg-pink-600 px-6 py-3 rounded shadow text-white">Get Started</a>
             <a href="#features" class="bg-white text-blue-500 hover:bg-gray-100 px-6 py-3 rounded shadow ml-4">Learn More</a>
         </div>
     </section>
