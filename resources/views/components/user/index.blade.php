@@ -15,43 +15,61 @@
             <div class="overflow-x-auto">
                 <!-- Table for Larger Screens -->
                 <table class="hidden sm:table min-w-full bg-white border border-gray-200">
-                    <thead>
-                        <tr class="bg-gray-100 border-b">
-                            <th class="text-left px-4 py-2">Name</th>
-                            <th class="text-left px-4 py-2">Email</th>
-                            <th class="text-left px-4 py-2">Contact</th>
-                            <th class="text-left px-4 py-2">Address</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($supervisors as $index => $supervisor)
-                            <tr 
-                                class="border-b hover:bg-gray-50 cursor-pointer" 
-                                onclick="openModal({{ json_encode($supervisor) }})">
-                                <td class="px-4 py-2">{{ $supervisor->name }}</td>
-                                <td class="px-4 py-2">{{ $supervisor->email }}</td>
-                                <td class="px-4 py-2">{{ ucfirst($supervisor->phone_number) }}</td>
-                                <td class="px-4 py-2">{{ $supervisor->address }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
+        <thead>
+    <tr class="bg-gray-100 border-b">
+        <th class="text-left px-4 py-2">Name</th>
+        <th class="text-left px-4 py-2">Email</th>
+        <th class="text-left px-4 py-2">Contact</th>
+        <th class="text-left px-4 py-2">Address</th>
+        <th class="text-left px-4 py-2">Actions</th> <!-- New column for actions -->
+    </tr>
+</thead>
+<tbody>
+    @foreach($supervisors as $index => $supervisor)
+        <tr class="border-b hover:bg-gray-50">
+            <td class="px-4 py-2">{{ $supervisor->name }}</td>
+            <td class="px-4 py-2">{{ $supervisor->email }}</td>
+            <td class="px-4 py-2">{{ ucfirst($supervisor->phone_number) }}</td>
+            <td class="px-4 py-2">{{ $supervisor->address }}</td>
+            <td class="px-4 py-2 text-right">
+            <button onclick="openModal({{ json_encode($supervisor) }})"
+        class="text-gray-600 hover:text-gray-900 focus:outline-none">
+    <!-- Three dots icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 6v.01M12 12v.01M12 18v.01" />
+    </svg>
+</button>
+
+            </td>
+        </tr>
+    @endforeach
+</tbody>
+
                 </table>
 
                 <!-- Cards for Small Screens -->
                 <div class="sm:hidden">
-                    @foreach($supervisors as $index => $supervisor)
-                        <div 
-                            class="bg-gray-50 border border-gray-200 rounded-lg mb-4 p-4 shadow cursor-pointer"
-                            onclick="openModal({{ json_encode($supervisor) }})">
-                            <h2 class="text-lg font-bold">Supervisor {{ $index + 1 }}</h2>
-                            <p><strong>Name:</strong> {{ $supervisor->name }}</p>
-                            <p><strong>Email:</strong> {{ $supervisor->email }}</p>
-                            <p><strong>Contact:</strong> {{ ucfirst($supervisor->phone_number) }}</p>
-                            <p><strong>Address:</strong> {{ $supervisor->address }}</p>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
+    @foreach($supervisors as $index => $supervisor)
+        <div class="bg-gray-50 border border-gray-200 rounded-lg mb-4 p-4 shadow">
+            <h2 class="text-lg font-bold flex justify-between items-center">
+                Supervisor {{ $index + 1 }}
+                <button onclick="openModal({{ json_encode($supervisor) }})"
+        class="text-gray-600 hover:text-gray-900 focus:outline-none">
+    <!-- Three dots icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 6v.01M12 12v.01M12 18v.01" />
+    </svg>
+</button>
+
+            </h2>
+            <p><strong>Name:</strong> {{ $supervisor->name }}</p>
+            <p><strong>Email:</strong> {{ $supervisor->email }}</p>
+            <p><strong>Contact:</strong> {{ ucfirst($supervisor->phone_number) }}</p>
+            <p><strong>Address:</strong> {{ $supervisor->address }}</p>
+        </div>
+    @endforeach
+</div>
+
         @endif
     </div>
 

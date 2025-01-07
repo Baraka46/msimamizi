@@ -6,7 +6,7 @@
         <h2>Step 1: Register Your Company</h2>
 
         <label for="name">Company Name:</label>
-        <input type="text" name="name" value="{{ old('name') }}" required>
+        <input type="text" name="name" value="{{ old('name') }}" requir ed>
 
         <label for="email">Email:</label>
         <input type="email" name="email" value="{{ old('email') }}" required>
