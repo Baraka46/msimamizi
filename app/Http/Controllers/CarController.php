@@ -80,9 +80,22 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        return view('cars.show', compact('car'));
+        $supervisors = User::where('role', 'supervisor')->get();
+        return view('components.cars.show', compact('car', 'supervisors'));
     }
-
+    public function assignSupervisor(Request $request, Car $car)
+    {
+        $request->validate([
+            'assigned_supervisor_id' => 'nullable|exists:users,id',
+        ]);
+    
+        $car->update([
+            'assigned_supervisor_id' => $request->assigned_supervisor_id,
+        ]);
+    
+        return redirect()->route('cars.show', $car->id)->with('success', 'Supervisor assigned successfully.');
+    }
+    
     /**
      * Show the form for editing a car
      */
