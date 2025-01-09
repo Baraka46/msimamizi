@@ -44,6 +44,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/supervisors', [UserController::class, 'store'])->name('supervisors.store'); // Store supervisor
     Route::patch('/supervisors/{id}/disable', [UserController::class, 'disableSupervisor'])->name('supervisors.disable');
     Route::patch('/supervisors/{id}/enable', [UserController::class, 'enableSupervisor'])->name('supervisors.enable');
+    Route::get('supervisors/{id}', [UserController::class, 'show'])->name('supervisors.show');
+    Route::patch('supervisors/{id}/assign-cars', [UserController::class, 'assignCars'])->name('supervisors.assign-cars');
+
 
 });
 

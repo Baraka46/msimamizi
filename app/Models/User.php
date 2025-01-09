@@ -117,6 +117,10 @@ public function assignSupervisorToCar($supervisorData, $carId)
 
     return null; // Admin cannot assign supervisors
 }
+public function assignedCars()
+{
+    return $this->hasMany(Car::class, 'assigned_supervisor_id');
+}
 
 // Method to set the Hesabu rate (Owner-specific functionality)
 public function setHesabuRate($rate)

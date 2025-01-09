@@ -75,7 +75,46 @@ class UserController extends Controller
 
         return redirect()->route('supervisors.index')->with('success', 'Supervisor has been disabled.');
     }
-
+    public function show($id)
+    {
+        // Find supervisor by ID
+        $supervisor = User::findOrFail($id);
+    
+        // Ensure the user is a supervisor
+        if ($supervisor->role !== 'supervisor') {
+            return redirect()->route('supervisors.index')->with('error', 'Invalid supervisor.');
+        }
+    
+        // Get cars assigned to the supervisor
+        $assignedCars = Car::where('assigned_supervisor_id', $supervisor->id)->get();
+    
+        // Get available cars (not assigned to any supervisor)
+        $availableCars = Car::whereNull('assigned_supervisor_id')->get();
+    
+        return view('components.user.details', compact('supervisor', 'assignedCars', 'availableCars'));
+    }
+    
+    public function assignCars(Request $request, $id)
+    {
+        // Find supervisor by ID
+        $supervisor = User::findOrFail($id);
+    
+        // Ensure the user is a supervisor
+        if ($supervisor->role !== 'supervisor') {
+            return redirect()->route('supervisors.show', $id)->with('error', 'Invalid supervisor.');
+        }
+    
+        $request->validate([
+            'car_ids' => 'required|array',
+            'car_ids.*' => 'exists:cars,id',
+        ]);
+    
+        // Assign selected cars to the supervisor
+        Car::whereIn('id', $request->car_ids)->update(['assigned_supervisor_id' => $supervisor->id]);
+    
+        return redirect()->route('supervisors.show', $id)->with('success', 'Cars assigned successfully.');
+    }
+    
     /**
      * Enable a supervisor.
      */

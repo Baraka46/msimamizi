@@ -89,7 +89,7 @@
                 @csrf
                 @method('PATCH')
                 <button type="submit" 
-                        class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+                        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-600 transition"
                         onclick="return confirm('Are you sure you want to disable this supervisor?')">
                     Disable
                 </button>
@@ -97,12 +97,19 @@
 
             <!-- Edit Info Button -->
             <a id="editLink" href="#" 
-               class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+               class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
                 Edit Info
             </a>
+            <!-- View Supervisor Button -->
+            <a id="viewSupervisorLink" href="#" 
+   class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 transition">
+   View 
+</a>
+
+
         </div>
         <button onclick="closeModal()" 
-                class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+                class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition mt-2">
             Close
         </button>
     </div>
@@ -128,6 +135,8 @@ function openModal(supervisor) {
 
     // Update the Disable button's form action dynamically
     document.getElementById('disableForm').action = `/supervisors/${supervisor.id}/disable`;
+
+    document.getElementById('viewSupervisorLink').href = `/supervisors/${supervisor.id}`;
 
     // Show the Disable button in the modal
     document.getElementById('disableForm').classList.remove('hidden');
