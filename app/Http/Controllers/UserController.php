@@ -5,6 +5,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+
+use App\Models\Car;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -15,26 +17,28 @@ class UserController extends Controller
      * Show the list of supervisors.
      */
     public function index()
-{
-    // Ensure that only the owner can access the list of supervisors
-    if (Auth::user()->role !== 'owner') {
-        return redirect()->route('home')->with('error', 'You are not authorized to view this page.');
+    {
+        // Ensure that only the owner can access the list of supervisors
+        if (Auth::user()->role !== 'owner') {
+            return redirect()->route('home')->with('error', 'You are not authorized to view this page.');
+        }
+
+        $ownerCompanyId = auth()->user()->company_id;
+
+        // Get all active supervisors
+        $supervisors = User::where('role', 'supervisor')
+                           ->where('status', 'active')
+                           ->get();
+
+        // Get all inactive supervisors
+        $disabledSupervisors = User::where('company_id', $ownerCompanyId)
+                                   ->where('role', 'supervisor')
+                                   ->where('status', 'inactive')
+                                   ->get();
+
+        // Pass both variables to the view
+        return view('components.user.index', compact('supervisors', 'disabledSupervisors'));
     }
-
-    $ownerCompanyId = auth()->user()->company_id;
-    
-    // Get all supervisors (assuming supervisor role)
-    $supervisors = User::where('role', 'supervisor')->get();
-
-    // Get all disabled supervisors (role = user and company_id matches owner)
-    $disabledSupervisors = User::where('company_id', $ownerCompanyId)
-                               ->where('role', 'user')
-                               ->get();
-
-    // Pass both variables to the view
-    return view('components.user.index', compact('supervisors', 'disabledSupervisors')); 
-}
-
 
     /**
      * Show the form for creating a new supervisor.
@@ -46,47 +50,51 @@ class UserController extends Controller
             return redirect()->route('home')->with('error', 'You are not authorized to perform this action.');
         }
 
-        return view('components.user.create'); // Assuming you already have the view
+        return view('components.user.create');
     }
+
+    /**
+     * Disable a supervisor.
+     */
     public function disableSupervisor($id)
     {
         // Find the supervisor by ID
         $supervisor = User::findOrFail($id);
-    
-        // Update the supervisor's role to 'user'
-        $supervisor->role = 'user';
-        $supervisor->save();
-    
-        // Fetch the updated list of all supervisors (same as in the index method)
-        $ownerCompanyId = auth()->user()->company_id;
-        $supervisors = User::where('role', 'supervisor')->get();
-        $disabledSupervisors = User::where('company_id', $ownerCompanyId)
-                                   ->where('role', 'user')
-                                   ->get();
-    
-        // Return the view with both the supervisor and the lists of supervisors
-        return view('components.user.index', compact('supervisors', 'disabledSupervisors'))
-               ->with('success', 'Supervisor has been disabled.');
-    }
-    
 
-    // Controller
+        // Ensure the user is a supervisor
+        if ($supervisor->role !== 'supervisor') {
+            return redirect()->route('supervisors.index')->with('error', 'This user is not a supervisor.');
+        }
+
+        // Mark the supervisor as inactive
+        $supervisor->status = 'inactive';
+        $supervisor->save();
+
+        // Unassign the supervisor from all associated cars
+        Car::where('assigned_supervisor_id', $supervisor->id)->update(['assigned_supervisor_id' => null]);
+
+        return redirect()->route('supervisors.index')->with('success', 'Supervisor has been disabled.');
+    }
+
+    /**
+     * Enable a supervisor.
+     */
     public function enableSupervisor($id)
     {
-        // Find the user (supervisor) by the ID
-        $user = User::findOrFail($id);
-    
-        // Ensure the user is currently a 'user' (disabled)
-        if ($user->role === 'user') {
-            // Change the role to 'supervisor' to enable the user
-            $user->role = 'supervisor';
-            $user->save();
-    
-            return redirect()->route('supervisors.index')->with('success', 'Supervisor enabled successfully');
+        // Find the supervisor by ID
+        $supervisor = User::findOrFail($id);
+
+        // Ensure the user is currently inactive
+        if ($supervisor->status === 'inactive' && $supervisor->role === 'supervisor') {
+            // Mark the supervisor as active
+            $supervisor->status = 'active';
+            $supervisor->save();
+
+            return redirect()->route('supervisors.index')->with('success', 'Supervisor enabled successfully.');
         }
-    
-        // If the user is already a supervisor, you can return an error or just skip
-        return redirect()->route('supervisors.index')->with('error', 'User is already a supervisor');
+
+        // If the user is already active, return an error
+        return redirect()->route('supervisors.index')->with('error', 'This supervisor is already active.');
     }
     
 

@@ -26,6 +26,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cars/create', [CarController::class, 'create'])->name('cars.create');
 
     Route::get('cars/{id}', [CarController::class, 'show'])->name('cars.show'); // Show car details
+    Route::get('cars/{id}/assign-supervisor', [CarController::class, 'assignSupervisorForm'])->name('cars.assign-supervisor');
+Route::patch('cars/{id}/assign-supervisor', [CarController::class, 'assignSupervisor'])->name('cars.update-supervisor');
+
 });
 // web.php
 

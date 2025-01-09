@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();
