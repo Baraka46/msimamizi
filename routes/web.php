@@ -46,6 +46,9 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/supervisors/{id}/enable', [UserController::class, 'enableSupervisor'])->name('supervisors.enable');
     Route::get('supervisors/{id}', [UserController::class, 'show'])->name('supervisors.show');
     Route::patch('supervisors/{id}/assign-cars', [UserController::class, 'assignCars'])->name('supervisors.assign-cars');
+    Route::delete('/supervisors/{supervisor}/unassign-car/{car}', [UserController::class, 'unassignCar'])
+    ->name('supervisors.unassign-car');
+
 
 
 });

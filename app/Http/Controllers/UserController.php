@@ -114,6 +114,28 @@ class UserController extends Controller
     
         return redirect()->route('supervisors.show', $id)->with('success', 'Cars assigned successfully.');
     }
+    public function unassignCar(Request $request, $supervisorId, $carId)
+    {
+        // Find supervisor by ID
+        $supervisor = User::findOrFail($supervisorId);
+    
+        // Ensure the user is a supervisor
+        if ($supervisor->role !== 'supervisor') {
+            return redirect()->route('supervisors.show', $supervisorId)->with('error', 'Invalid supervisor.');
+        }
+    
+        // Validate that the car exists and is currently assigned to the supervisor
+        $car = Car::where('id', $carId)
+            ->where('assigned_supervisor_id', $supervisor->id)
+            ->firstOrFail();
+    
+        // Unassign the car from the supervisor
+        $car->update(['assigned_supervisor_id' => null]);
+    
+        return redirect()->route('supervisors.show', $supervisorId)->with('success', 'Car unassigned successfully.');
+    }
+    
+
     
     /**
      * Enable a supervisor.
