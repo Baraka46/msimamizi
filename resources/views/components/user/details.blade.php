@@ -12,16 +12,19 @@
 @if ($assignedCars->isEmpty())
     <p class="text-gray-600">No cars assigned yet.</p>
 @else
-    <ul class="list-disc pl-5 text-gray-700 mb-6">
+    <ul class="divide-y divide-gray-200 mb-6">
         @foreach ($assignedCars as $car)
-            <li class="flex justify-between items-center">
-                <span>{{ $car->plate_number }} - {{ $car->model }}</span>
+            <li class="flex justify-between items-center py-2">
+                <div class="flex items-center space-x-4">
+                    <span class="font-semibold text-gray-700">{{ $car->plate_number }}</span>
+                    <span class="text-gray-500">{{ $car->model }}</span>
+                </div>
                 <!-- Unassign Button -->
                 <form action="{{ route('supervisors.unassign-car', [$supervisor->id, $car->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" 
-                        class="ml-4 px-3 py-1 bg-red-500 text-white rounded-md shadow-sm hover:bg-red-600">
+                        class="px-3 py-1 bg-red-500 text-white rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300">
                         Unassign
                     </button>
                 </form>

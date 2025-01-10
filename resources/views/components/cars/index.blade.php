@@ -3,9 +3,12 @@
         <!-- Header Section -->
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-bold">Car List</h1>
-            <a href="{{ route('cars.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
-                Create Car
-            </a>
+            @unless(Auth::user()->role === 'supervisor')
+    <a href="{{ route('cars.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+        Create Car
+    </a>
+@endunless
+
         </div>
 
         <!-- Table Section -->
