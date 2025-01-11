@@ -5,6 +5,7 @@ use App\Http\Controllers\CarController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\DailyHesabuController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -57,4 +58,11 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['web'])->group(function () {
     Route::get('/company/register', [RegistrationController::class, 'showForm'])->name('register.form');
     Route::post('/company/register', [RegistrationController::class, 'handleStep'])->name('register.handleStep');
+});
+
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/daily-hesabu', [DailyHesabuController::class, 'index'])->name('daily-hesabu.index');
+    Route::post('/daily-hesabu', [DailyHesabuController::class, 'store'])->name('daily-hesabu.store');
 });
