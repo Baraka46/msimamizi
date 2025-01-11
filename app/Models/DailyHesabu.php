@@ -19,4 +19,12 @@ class DailyHesabu extends Model
         'collection_time',
         'description',
     ];
+    protected $casts = [
+        'collection_time' => 'datetime',
+    ];
+
+    public function car()
+    {
+        return $this->belongsTo(Car::class, 'car_id', 'id');
+    }
 }

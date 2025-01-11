@@ -43,4 +43,8 @@ class Car extends Model
         // Ensure that the car belongs to the user's company
         return $query->where('company_id', $user->company_id);
     }
+    public function dailyHesabus()
+    {
+        return $this->hasMany(DailyHesabu::class, 'car_id', 'id');
+    }
 }

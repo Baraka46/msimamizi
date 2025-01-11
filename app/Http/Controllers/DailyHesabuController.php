@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\DailyHesabu;
 use App\Models\Car;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+
 
 class DailyHesabuController extends Controller
 {
@@ -13,12 +15,36 @@ class DailyHesabuController extends Controller
      */
     public function index()
 {
+    // Get the current date
+    $today = Carbon::today();
+
+    // Get the logged-in supervisor's ID
     $supervisorId = auth()->user()->id;
 
-    $cars = Car::where('assigned_supervisor_id', $supervisorId)->get();
+    // Cars assigned to the supervisor that have not been filled today
+    $unfilledCars = Car::where('assigned_supervisor_id', $supervisorId)
+        ->whereDoesntHave('dailyHesabus', function ($query) use ($today) {
+            $query->whereDate('collection_time', $today);
+        })
+        ->get();
 
-    return view('components.hesabu.addHesabu', compact('cars'));
+    // Cars assigned to the supervisor that have been filled today
+    $filledCars = Car::where('assigned_supervisor_id', $supervisorId)
+        ->whereHas('dailyHesabus', function ($query) use ($today) {
+            $query->whereDate('collection_time', $today);
+        })
+        ->with(['dailyHesabus' => function ($query) use ($today) {
+            $query->whereDate('collection_time', $today);
+        }])
+        ->get();
+
+    // Pass the data to the view
+    return view('components.hesabu.addHesabu', [
+        'unfilledCars' => $unfilledCars,
+        'filledCars' => $filledCars,
+    ]);
 }
+
 
 public function store(Request $request)
 {
