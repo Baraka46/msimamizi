@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\DailyHesabuController;
+use App\Http\Controllers\MaintenanceController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -66,3 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/daily-hesabu', [DailyHesabuController::class, 'index'])->name('daily-hesabu.index');
     Route::post('/daily-hesabu', [DailyHesabuController::class, 'store'])->name('daily-hesabu.store');
 });
+
+
+
+Route::resource('maintenances', MaintenanceController::class);

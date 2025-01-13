@@ -12,23 +12,29 @@ class MaintenanceController extends Controller
      */
     public function index()
     {
-        //
+        $maintenances = Maintenance::with('car')->latest()->get();
+        return view('maintenances.index', compact('maintenances'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $cars = Car::all(); // Fetch cars for selection
+        return view('maintenances.create', compact('cars'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'car_id' => 'required|exists:cars,id',
+            'expense_name' => 'required|string|max:255',
+            'cost' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+            'date' => 'required|date',
+        ]);
+
+        Maintenance::create($validated);
+
+        return redirect()->route('maintenances.index')->with('success', 'Maintenance recorded successfully!');
     }
 
     /**
