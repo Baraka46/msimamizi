@@ -71,3 +71,5 @@ Route::middleware('auth')->group(function () {
 
 
 Route::resource('maintenances', MaintenanceController::class);
+Route::post('/maintenances/store-multiple', [MaintenanceController::class, 'storeMultiple'])->name('maintenances.storeMultiple');
+

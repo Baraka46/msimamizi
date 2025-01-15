@@ -34,7 +34,10 @@ class Car extends Model
         return $this->belongsTo(User::class, 'assigned_supervisor_id');
     }
     
-
+    public function maintenances()
+    {
+        return $this->hasMany(Maintenance::class);
+    }
     /**
      * Scope to restrict car access to the owner of the company.
      */

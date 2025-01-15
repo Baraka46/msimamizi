@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Maintenance;
 use Illuminate\Http\Request;
+use App\Models\Car;
+use Illuminate\Support\Facades\Auth;
 
 class MaintenanceController extends Controller
 {
@@ -13,29 +15,48 @@ class MaintenanceController extends Controller
     public function index()
     {
         $maintenances = Maintenance::with('car')->latest()->get();
-        return view('maintenances.index', compact('maintenances'));
+        $cars = Car::where('assigned_supervisor_id', Auth::id())
+                ->with('maintenances')
+                ->get();
+        return view('components.maintenances.index', compact('maintenances','cars'));
     }
 
     public function create()
     {
-        $cars = Car::all(); // Fetch cars for selection
-        return view('maintenances.create', compact('cars'));
+        $cars = Car::where('assigned_supervisor_id', Auth::id())->get();
+
+        // If no cars are assigned, redirect with a message
+        if ($cars->isEmpty()) {
+            return redirect()->route('dashboard')->with('info', 'No cars are assigned to you.');
+        }
+    
+        return view('components.maintenances.create', compact('cars'));
     }
 
-    public function store(Request $request)
+    public function storeMultiple(Request $request)
     {
         $validated = $request->validate([
             'car_id' => 'required|exists:cars,id',
-            'expense_name' => 'required|string|max:255',
-            'cost' => 'required|numeric|min:0',
-            'description' => 'nullable|string',
-            'date' => 'required|date',
+            'expenses' => 'required|array',
+            'expenses.*.expense_name' => 'required|string|max:255',
+            'expenses.*.cost' => 'required|numeric|min:0',
+            'expenses.*.description' => 'nullable|string',
+            'expenses.*.date' => 'required|date',
         ]);
-
-        Maintenance::create($validated);
-
+    
+        foreach ($validated['expenses'] as $expense) {
+            Maintenance::create([
+                'car_id' => $validated['car_id'],
+                'expense_name' => $expense['expense_name'],
+                'cost' => $expense['cost'],
+                'description' => $expense['description'] ?? null,
+                'date' => $expense['date'],
+            ]);
+        }
+    
         return redirect()->route('maintenances.index')->with('success', 'Maintenance recorded successfully!');
     }
+    
 
     /**
      * Display the specified resource.
