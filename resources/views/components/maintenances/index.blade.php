@@ -24,10 +24,10 @@
                         <tbody>
                             @foreach ($car->maintenances as $maintenance)
                                 <tr class="hover:bg-gray-100">
-                                    <td class="border px-4 py-2 text-gray-600">{{ $maintenance->expense_name }}</td>
-                                    <td class="border px-4 py-2 text-gray-600">{{ number_format($maintenance->cost, 2) }}</td>
-                                    <td class="border px-4 py-2 text-gray-600">{{ $maintenance->description ?? 'N/A' }}</td>
-                                    <td class="border px-4 py-2 text-gray-600">{{ $maintenance->date }}</td>
+                                    <td class="border px-4 py-2 text-black">{{ $maintenance->expense_name }}</td>
+                                    <td class="border px-4 py-2 text-black">{{ number_format($maintenance->cost, 2) }}</td>
+                                    <td class="border px-4 py-2 text-black">{{ $maintenance->description ?? 'N/A' }}</td>
+                                    <td class="border px-4 py-2 text-black">{{ $maintenance->date }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

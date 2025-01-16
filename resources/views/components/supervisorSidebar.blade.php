@@ -89,7 +89,7 @@
     <ul id="dropdown-menu" 
         class="hidden flex flex-col space-y-1 pl-8 mt-2">
         <li>
-    <a href="" 
+    <a href="{{route('daily-hesabu.index')}}" 
        class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
        <i class="fas fa-money-bill-alt mr-2"></i>
 
