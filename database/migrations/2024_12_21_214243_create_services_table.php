@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('car_id')->constrained('cars')->onDelete('cascade');
             $table->enum('service_type', ['oil', 'tires', 'engine', 'balljoint']);
-            $table->decimal('cost', 10, 2);
             $table->date('date_performed');
             $table->date('next_due_date')->nullable();
             $table->timestamps();

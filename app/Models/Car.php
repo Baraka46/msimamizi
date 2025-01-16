@@ -50,4 +50,8 @@ class Car extends Model
     {
         return $this->hasMany(DailyHesabu::class, 'car_id', 'id');
     }
+    public function services()
+    {
+        return $this->hasMany(Service::class);
+    }
 }
