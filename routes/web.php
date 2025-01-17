@@ -7,7 +7,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\DailyHesabuController;
 use App\Http\Controllers\MaintenanceController;
-use App\Http\Controllers\ServiceDetailController;
 use App\Http\Controllers\ServiceController;
 
 Route::get('/', function () {
@@ -75,7 +74,7 @@ Route::middleware('auth')->group(function () {
 Route::resource('maintenances', MaintenanceController::class);
 Route::post('/maintenances/store-multiple', [MaintenanceController::class, 'storeMultiple'])->name('maintenances.storeMultiple');
 
-Route::resource('service_details', ServiceDetailController::class);
+
 
 
 Route::resource('services', ServiceController::class);
