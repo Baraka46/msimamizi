@@ -15,7 +15,6 @@
                     <thead>
                         <tr class="bg-gray-200">
                             <th class="px-4 py-2">Service Type</th>
-                            <th class="px-4 py-2">Cost</th>
                             <th class="px-4 py-2">Date Performed</th>
                             <th class="px-4 py-2">Next Due Date</th>
                             <th class="px-4 py-2">Days Left</th>
@@ -26,7 +25,6 @@
                         @foreach ($carServices as $service)
                             <tr>
                                 <td class="px-4 py-2">{{ ucfirst($service->service_type) }} service</td>
-                                <td class="px-4 py-2">{{ number_format($service->cost, 2) }}</td>
                                 <td class="px-4 py-2">{{ $service->date_performed->format('Y-m-d') }}</td>
                                 <td class="px-4 py-2">{{ $service->next_due_date->format('Y-m-d') }}</td>
                                 <td class="px-4 py-2">
@@ -52,7 +50,7 @@
     </form>
 
     <!-- Perform Button -->
-    <a href="{{ route('service_details.create', ['service_id' => $service->id]) }}" 
+    <a href="" 
        class="bg-blue-500 text-white px-2 py-1 rounded-md">
         Perform
     </a>

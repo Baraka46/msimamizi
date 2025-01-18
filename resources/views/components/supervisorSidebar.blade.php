@@ -19,23 +19,23 @@
         <!-- Logo Section -->
          <div>
         <div class="logo mb-10">
-            <h2 class="text-3xl font-bold text-center">Transport Hub supervisor</h2>
+            <h2 class="text-3xl font-bold text-center">msiamizi</h2>
        
 
         <!-- User Profile (Optional) -->
-        <nav x-data="{ showProfileMenu: false }" class="">
+        <!-- <nav x-data="{ showProfileMenu: false }" class="bg-blue-400 p-4 w-200 rounded-lg shadow-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
-            <!-- Left Aligned User Profile -->
+            
             <div class="flex items-center space-x-4">
-                <!-- Profile Picture -->
+               
                 <img 
                     src="https://via.placeholder.com/50" 
                     alt="Profile Picture" 
                     class="rounded-full w-12 h-12 cursor-pointer" 
                     @click="showProfileMenu = !showProfileMenu">
 
-                <!-- Name and Role -->
+              
                 <div 
                     class="flex flex-col cursor-pointer" 
                     @click="showProfileMenu = !showProfileMenu">
@@ -48,7 +48,7 @@
                 </div>
             </div>
 
-            <!-- Dropdown Menu -->
+           
             <div 
                 x-show="showProfileMenu" 
                 @click.outside="showProfileMenu = false" 
@@ -65,7 +65,7 @@
             </div>
         </div>
     </div>
-</nav>
+</nav> -->
 </div>
 
         <!-- Sidebar Navigation Links -->
@@ -125,9 +125,9 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('logout') }}" class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition text-red-500">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
+                <a href="{{ route('maintenances.index') }}" class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
+                <i class="fas fa-cogs"></i>
+                    <span>Maintanace</span>
                 </a>
             </li>
         </ul>

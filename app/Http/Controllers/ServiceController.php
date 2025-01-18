@@ -48,7 +48,6 @@ class ServiceController extends Controller
         $request->validate([
             'car_id' => 'required|exists:cars,id',
             'service_type' => 'required|in:oil,tires,engine,balljoint',
-            'cost' => 'required|numeric',
             'date_performed' => 'required|date',
             'next_due_date' => 'nullable|date',
         ]);
@@ -74,7 +73,6 @@ class ServiceController extends Controller
         $request->validate([
             'car_id' => 'required|exists:cars,id',
             'service_type' => 'required|in:oil,tires,engine,balljoint',
-            'cost' => 'required|numeric',
             'date_performed' => 'required|date',
             'next_due_date' => 'nullable|date',
         ]);

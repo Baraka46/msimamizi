@@ -42,7 +42,7 @@ class UsersTableSeeder extends Seeder
                 'email_verified_at' => null,
                 'password' => Hash::make('supervisor123'),
                 'role' => 'supervisor',
-                'company_id' => 3,
+                'company_id' => 1,
                 'remember_token' => null,
                 'created_at' => now(),
                 'updated_at' => now(),

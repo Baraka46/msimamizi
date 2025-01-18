@@ -24,10 +24,7 @@
             </select>
         </div>
 
-        <div class="mb-4">
-            <label for="cost" class="block font-semibold mb-2">Cost</label>
-            <input type="number" name="cost" id="cost" class="w-full border-gray-300 rounded-md p-2" step="0.01" required>
-        </div>
+       
 
         <div class="mb-4">
             <label for="date_performed" class="block font-semibold mb-2">Date Performed</label>

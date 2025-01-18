@@ -6,6 +6,7 @@ use App\Models\Maintenance;
 use Illuminate\Http\Request;
 use App\Models\Car;
 use Illuminate\Support\Facades\Auth;
+use App\Models\MaintenancePayment;
 
 class MaintenanceController extends Controller
 {
@@ -32,7 +33,6 @@ class MaintenanceController extends Controller
     
         return view('components.maintenances.create', compact('cars'));
     }
-
     public function storeMultiple(Request $request)
     {
         $validated = $request->validate([
@@ -40,24 +40,83 @@ class MaintenanceController extends Controller
             'expenses' => 'required|array',
             'expenses.*.expense_name' => 'required|string|max:255',
             'expenses.*.cost' => 'required|numeric|min:0',
+            'expenses.*.amount_paid' => 'nullable|numeric|min:0', // Change this field name to match 'amount_paid'
             'expenses.*.description' => 'nullable|string',
             'expenses.*.date' => 'required|date',
+            'expenses.*.payment_status' => 'required|in:paid,installment', // Add validation for payment status
         ]);
     
         foreach ($validated['expenses'] as $expense) {
-            Maintenance::create([
+            // Calculate outstanding balance
+            $outstandingBalance = $expense['cost'];
+    
+            // If it's an installment, reduce the outstanding balance based on the amount paid
+            if ($expense['payment_status'] === 'installment' && isset($expense['amount_paid'])) {
+                $outstandingBalance -= $expense['amount_paid'];
+            }
+    
+            // Create the maintenance entry
+            $maintenance = Maintenance::create([
                 'car_id' => $validated['car_id'],
                 'expense_name' => $expense['expense_name'],
                 'cost' => $expense['cost'],
+                'outstanding_balance' => $outstandingBalance,
                 'description' => $expense['description'] ?? null,
                 'date' => $expense['date'],
+                'payment_status' => $expense['payment_status'],
             ]);
+    
+            // If it's an installment, also store the payment in the payments table
+            if ($expense['payment_status'] === 'installment' && isset($expense['amount_paid'])) {
+                $maintenance->payments()->create([
+                    'amount' => $expense['amount_paid'],
+                    'payment_date' => now(), // Set the current date for payment
+                ]);
+            }
         }
     
         return redirect()->route('maintenances.index')->with('success', 'Maintenance recorded successfully!');
     }
     
+    
 
+
+    
+    public function addPayment(Request $request, Maintenance $maintenance)
+{
+    $validated = $request->validate([
+        'amount' => 'required|numeric|min:1|max:' . $maintenance->outstanding_balance,
+        'payment_date' => 'required|date',
+    ]);
+
+    // Record the payment in the maintenance_payments table
+    MaintenancePayment::create([
+        'maintenance_id' => $maintenance->id,
+        'amount' => $validated['amount'],
+        'payment_date' => $validated['payment_date'],
+    ]);
+
+    // Deduct the payment from the outstanding balance
+    $maintenance->outstanding_balance -= $validated['amount'];
+    if ($maintenance->outstanding_balance <= 0) {
+        $maintenance->outstanding_balance = 0; // Ensure it doesn't go negative
+    }
+    $maintenance->save();
+
+    return redirect()->route('maintenances.index')->with('success', 'Payment added successfully!');
+}
+
+    
+
+    /**
+     * View maintenance payments.
+     */
+    public function viewPayments(Maintenance $maintenance)
+    {
+        $payments = $maintenance->payments;
+
+        return view('components.maintenances.payments', compact('maintenance', 'payments'));
+    }
     /**
      * Display the specified resource.
      */
