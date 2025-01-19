@@ -126,7 +126,7 @@
             </li>
             <li>
                 <a href="{{ route('maintenances.index') }}" class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
-                <i class="fas fa-cogs"></i>
+                <i class="fa-solid fa-screwdriver-wrench"></i>
                     <span>Maintanace</span>
                 </a>
             </li>

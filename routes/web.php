@@ -78,7 +78,8 @@ Route::post('/maintenances/store-multiple', [MaintenanceController::class, 'stor
 
 
 Route::resource('services', ServiceController::class);
-Route::resource('maintenances', MaintenanceController::class);
 
+
+Route::resource('maintenances', MaintenanceController::class);
 Route::post('maintenances/{maintenance}/add-payment', [MaintenanceController::class, 'addPayment'])->name('maintenances.addPayment');
 Route::get('maintenances/{maintenance}/payments', [MaintenanceController::class, 'viewPayments'])->name('maintenances.viewPayments');

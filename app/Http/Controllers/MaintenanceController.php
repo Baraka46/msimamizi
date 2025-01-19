@@ -18,7 +18,8 @@ class MaintenanceController extends Controller
         $maintenances = Maintenance::with('car')->latest()->get();
         $cars = Car::where('assigned_supervisor_id', Auth::id())
                 ->with('maintenances')
-                ->get();
+                ->get()
+                ;
         return view('components.maintenances.index', compact('maintenances','cars'));
     }
 
@@ -51,9 +52,15 @@ class MaintenanceController extends Controller
             $outstandingBalance = $expense['cost'];
     
             // If it's an installment, reduce the outstanding balance based on the amount paid
-            if ($expense['payment_status'] === 'installment' && isset($expense['amount_paid'])) {
-                $outstandingBalance -= $expense['amount_paid'];
+            if ($expense['payment_status'] === 'paid') {
+                // Payment in full logic
+                $outstandingBalance = 0; // Fully paid, no balance
+                $initialPayment = $expense['cost']; // Full payment
+            } elseif ($expense['payment_status'] === 'installment' && isset($expense['amount_paid'])) {
+                // Installment logic
+                $outstandingBalance -= $expense['amount_paid']; // Subtract amount paid from outstanding balance
             }
+            
     
             // Create the maintenance entry
             $maintenance = Maintenance::create([
@@ -115,7 +122,7 @@ class MaintenanceController extends Controller
     {
         $payments = $maintenance->payments;
 
-        return view('components.maintenances.payments', compact('maintenance', 'payments'));
+        return view('components.maintenances.payment', compact('maintenance', 'payments'));
     }
     /**
      * Display the specified resource.
