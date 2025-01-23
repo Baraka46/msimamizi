@@ -41,7 +41,7 @@
 
                     {{-- Cost --}}
                     <div class="mb-4">
-                        <label for="expenses[0][cost]" class="block text-sm font-medium text-gray-700">Cost (in USD)</label>
+                        <label for="expenses[0][cost]" class="block text-sm font-medium text-gray-700">Cost Tzs</label>
                         <input type="number" step="0.01" name="expenses[0][cost]" class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g., 200" required>
                     </div>
 
@@ -98,7 +98,7 @@
                         <input type="text" name="expenses[${index}][expense_name]" class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g., Tire Change" required>
                     </div>
                     <div class="mb-4">
-                        <label for="expenses[${index}][cost]" class="block text-sm font-medium text-gray-700">Cost (in USD)</label>
+                        <label for="expenses[${index}][cost]" class="block text-sm font-medium text-gray-700">Cost </label>
                         <input type="number" step="0.01" name="expenses[${index}][cost]" class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g., 200" required>
                     </div>
                     <div class="mb-4">

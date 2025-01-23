@@ -30,13 +30,13 @@
             <!-- Total Maintenance Expenses -->
             <div class="flex-1 min-w-[250px] bg-red-100 p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:bg-red-200 text-center">
                 <h3 class="text-xl font-semibold text-red-800 mb-2">Total Maintenance Expenses</h3>
-                <p class="text-4xl font-bold text-red-900">{{ number_format($totalMaintenanceExpenses, 2) }} USD</p>
+                <p class="text-4xl font-bold text-red-900">{{ number_format($totalMaintenanceExpenses, 2) }} Tsh</p>
             </div>
 
             <!-- Total Hesabu Collected -->
             <div class="flex-1 min-w-[250px] bg-blue-100 p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:bg-blue-200 text-center">
                 <h3 class="text-xl font-semibold text-blue-800 mb-2">Total Hesabu Collected</h3>
-                <p class="text-4xl font-bold text-blue-900">{{ number_format($totalHesabuCollected, 2) }} USD</p>
+                <p class="text-4xl font-bold text-blue-900">{{ number_format($totalHesabuCollected, 2) }} Tsh</p>
             </div>
         </div>
     </div>

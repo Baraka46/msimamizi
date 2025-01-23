@@ -48,19 +48,19 @@ class MaintenanceController extends Controller
         ]);
     
         foreach ($validated['expenses'] as $expense) {
-            // Calculate outstanding balance
+            // Determine outstanding balance and initial payment
             $outstandingBalance = $expense['cost'];
+            $initialPayment = 0; // Default to 0
     
-            // If it's an installment, reduce the outstanding balance based on the amount paid
             if ($expense['payment_status'] === 'paid') {
-                // Payment in full logic
-                $outstandingBalance = 0; // Fully paid, no balance
+                // Fully paid
+                $outstandingBalance = 0; // No balance remaining
                 $initialPayment = $expense['cost']; // Full payment
             } elseif ($expense['payment_status'] === 'installment' && isset($expense['amount_paid'])) {
-                // Installment logic
-                $outstandingBalance -= $expense['amount_paid']; // Subtract amount paid from outstanding balance
+                // Partial payment
+                $outstandingBalance -= $expense['amount_paid']; // Deduct initial payment
+                $initialPayment = $expense['amount_paid']; // Initial payment amount
             }
-            
     
             // Create the maintenance entry
             $maintenance = Maintenance::create([
@@ -73,11 +73,11 @@ class MaintenanceController extends Controller
                 'payment_status' => $expense['payment_status'],
             ]);
     
-            // If it's an installment, also store the payment in the payments table
-            if ($expense['payment_status'] === 'installment' && isset($expense['amount_paid'])) {
+            // Record the payment in the payments table
+            if ($initialPayment > 0) {
                 $maintenance->payments()->create([
-                    'amount' => $expense['amount_paid'],
-                    'payment_date' => now(), // Set the current date for payment
+                    'amount' => $initialPayment,
+                    'payment_date' => now(), // You can replace this with `$expense['date']` if needed
                 ]);
             }
         }

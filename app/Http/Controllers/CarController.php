@@ -145,4 +145,35 @@ public function assignSupervisor(Request $request, $id)
     $car->delete();
     return redirect()->route('cars.index')->with('success', 'Car deleted successfully');
 }
+public function GroupCreate(){
+    $user = auth()->user();
+
+    if($user->isOwner()){
+        $cars = Car::when($user->isOwner(), function ($query) use ($user) {
+            // Restrict access for owners to only their own company
+            $query->forOwner($user);
+        })->get();
+        return view('',compact('cars'));
+    }
+    if($user->isSupervisor()){
+        $cars =Car::when('assigned_supervisor_id', $user->id)->get();
+        return view('components.',compact('cars'));
+    }
+}
+public function GroupStore(Request $request){
+
+    $request->validate([
+        'name'=>'required|string',
+        'car_id' => 'required|exists:cars,id',
+        'description'=>'nullable|string' ,
+        
+    ]);
+    $cargroup=CarGroup::create([    
+       'name'=>$request->name,
+       'car_id'=>$request->car_id,
+       'description'=>$request->description,
+       
+
+    ]);
+}
 }
