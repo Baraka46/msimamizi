@@ -6,6 +6,7 @@ use App\Models\Car;
 use App\Models\User;
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Http\CarGroup;
 
 class CarController extends Controller
 {
@@ -153,27 +154,42 @@ public function GroupCreate(){
             // Restrict access for owners to only their own company
             $query->forOwner($user);
         })->get();
-        return view('',compact('cars'));
+        return view('components.cars.group-create',compact('cars'));
     }
     if($user->isSupervisor()){
-        $cars =Car::when('assigned_supervisor_id', $user->id)->get();
-        return view('components.',compact('cars'));
+        $cars =Car::when('assigned_supervisor_id');
+        return view('components.cars.group-create',compact('cars'));
     }
 }
-public function GroupStore(Request $request){
+public function GroupStore(Request $request)
+{
+    $user = auth()->user();
+    $companyId = $user->company_id;
 
+    // Validate the incoming request
     $request->validate([
-        'name'=>'required|string',
-        'car_id' => 'required|exists:cars,id',
-        'description'=>'nullable|string' ,
-        
+        'name' => 'required|string|max:255',
+        'car_ids' => 'required|array', // Ensure car_ids is an array
+        'car_ids.*' => 'exists:cars,id', // Validate that each ID exists in the cars table
+        'description' => 'nullable|string|max:255',
     ]);
-    $cargroup=CarGroup::create([    
-       'name'=>$request->name,
-       'car_id'=>$request->car_id,
-       'description'=>$request->description,
-       
 
+    // Step 1: Create the CarGroup first
+    $carGroup = CarGroup::create([
+        'name' => $request->name,
+        'description' => $request->description,
+        'company_id' => $companyId,
     ]);
+
+    // Step 2: Assign the group ID to the selected cars
+    Car::whereIn('id', $request->car_ids)->update(['car_group_id' => $carGroup->id]);
+
+    return redirect()->route('CarGroup.index')->with('success', 'Group created and cars assigned successfully!');
+}
+
+
+public function GroupIndex(Request $request)
+{
+
 }
 }

@@ -9,7 +9,7 @@ class CarGroup extends Model
 {
     //
     use HasFactory;
-    protected $fillable = ['name', 'car_id', 'description', 'expenses_name', 'expenses_amount'];
+    protected $fillable = ['name', 'car_id', 'description','company_id'];
     
     public function car()
     {

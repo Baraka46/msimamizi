@@ -15,10 +15,8 @@ return new class extends Migration
         schema::create('car_groups', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('car_id')->constrained('cars')->onDelete('cascade');
             $table->string('description')->nullable();
-            $table->string('expenses_name')->nullable();
-            $table->decimal('expenses_amout', 10, 2)->nullable();
+            $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
             $table->timestamps();
         });
     }

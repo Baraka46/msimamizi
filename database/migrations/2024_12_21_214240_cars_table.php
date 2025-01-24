@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('route');
             $table->decimal('daily_hesabu_target', 10, 2);
             $table->foreignId('assigned_supervisor_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('car_group_id')->nullable()->constrained('car_groups')->onDelete('set null');
             $table->timestamps();
         });
     }
