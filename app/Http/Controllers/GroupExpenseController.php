@@ -11,19 +11,19 @@ class GroupExpenseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(CarGroup$group)
+    public function index(CarGroup $group)
     {
         $expenses = $group->groupExpenses()->latest()->get();
 
-        return view('group_expenses.index', compact('group', 'expenses'));
+        return view('components.cars.expense-index', compact('group', 'expenses'));
     }
 
     /**
      * Show the form for creating a new expense for a specific group.
      */
-    public function create(CarGroup$group)
+    public function create(CarGroup $group)
     {
-        return view('group_expenses.create', compact('group'));
+        return view(' components.cars.expense-create', compact('group'));
     }
 
     /**
@@ -48,7 +48,7 @@ class GroupExpenseController extends Controller
      */
     public function show(GroupExpense $expense)
     {
-        return view('group_expenses.show', compact('expense'));
+        return view('components.cars.expense-show', compact('expense'));
     }
 
     /**
@@ -56,7 +56,7 @@ class GroupExpenseController extends Controller
      */
     public function edit(GroupExpense $expense)
     {
-        return view('group_expenses.edit', compact('expense'));
+        return view('components.cars.expense-edit', compact('expense'));
     }
 
     /**
