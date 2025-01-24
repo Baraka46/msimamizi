@@ -8,6 +8,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\DailyHesabuController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\GroupExpenseController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,9 +32,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('cars/{id}', [CarController::class, 'show'])->name('cars.show'); // Show car details
     Route::get('cars/{id}/assign-supervisor', [CarController::class, 'assignSupervisorForm'])->name('cars.assign-supervisor');
 Route::patch('cars/{id}/assign-supervisor', [CarController::class, 'assignSupervisor'])->name('cars.update-supervisor');
-Route::get('cars/group/create',[CarController::class, 'GroupCreate'])->name('CarGroup.create');
+Route::get('cars/group/create',[CarController::class, 'GroupCreate'])->name('GroupCreate.create');
 Route::post('cars/group',[CarController::class, 'GroupStore'])->name('GroupStore.store');
-Route::get('cars/group',[CarController::class, 'GroupIndex'])->name('CarGroup.index');
+Route::get('cars/group/index',[CarController::class, 'GroupIndex'])->name('GroupIndex.index');
+
+Route::resource('cars/group/expenses', GroupExpenseController::class)->shallow();
+
 
 });
 // web.php

@@ -6,7 +6,7 @@ use App\Models\Car;
 use App\Models\User;
 use App\Models\Company;
 use Illuminate\Http\Request;
-use Illuminate\Http\CarGroup;
+use App\Models\CarGroup;
 
 class CarController extends Controller
 {
@@ -149,17 +149,18 @@ public function assignSupervisor(Request $request, $id)
 public function GroupCreate(){
     $user = auth()->user();
 
-    if($user->isOwner()){
-        $cars = Car::when($user->isOwner(), function ($query) use ($user) {
-            // Restrict access for owners to only their own company
-            $query->forOwner($user);
-        })->get();
-        return view('components.cars.group-create',compact('cars'));
+    if ($user->isOwner()) {
+        // Retrieve cars for the owner's company
+        $cars = Car::forOwner($user)->get();
+    } elseif ($user->isSupervisor()) {
+        // Retrieve cars assigned to the supervisor
+        $cars = Car::where('assigned_supervisor_id', $user->id)->get();
+    } else {
+        // Default fallback (e.g., for other roles)
+        $cars = collect(); // Empty collection
     }
-    if($user->isSupervisor()){
-        $cars =Car::when('assigned_supervisor_id');
-        return view('components.cars.group-create',compact('cars'));
-    }
+
+    return view('components.cars.group-create', compact('cars'));
 }
 public function GroupStore(Request $request)
 {
@@ -184,12 +185,27 @@ public function GroupStore(Request $request)
     // Step 2: Assign the group ID to the selected cars
     Car::whereIn('id', $request->car_ids)->update(['car_group_id' => $carGroup->id]);
 
-    return redirect()->route('CarGroup.index')->with('success', 'Group created and cars assigned successfully!');
+    return redirect()->route('GroupIndex.index')->with('success', 'Group created and cars assigned successfully!');
 }
 
 
 public function GroupIndex(Request $request)
 {
+    $user = auth()->user();
 
+    if ($user->isOwner()) {
+        $carGroups = CarGroup::where('company_id', $user->company_id)
+            ->with('cars') // Assuming the relationship exists
+            ->get();
+    } elseif ($user->isSupervisor()) {
+        $carGroups = CarGroup::whereHas('cars', function ($query) use ($user) {
+            $query->where('assigned_supervisor_id', $user->id);
+        })->with('cars')->get();
+    } else {
+        $carGroups = collect(); // No groups if the role doesn't match
+    }
+
+    return view('components.cars.group-index', compact('carGroups'));
 }
+
 }

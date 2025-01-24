@@ -11,8 +11,13 @@ class CarGroup extends Model
     use HasFactory;
     protected $fillable = ['name', 'car_id', 'description','company_id'];
     
-    public function car()
+    public function cars()
     {
-        return $this->$this->HasMany(Car::class);
+        return $this->HasMany(Car::class);
     }
+    public function groupExpenses()
+{
+    return $this->hasMany(GroupExpense::class, 'group_id');
+}
+
 }

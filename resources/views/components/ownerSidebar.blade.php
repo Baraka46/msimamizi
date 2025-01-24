@@ -101,6 +101,13 @@
     </a>
 </li>
 <li>
+<li>
+    <a href="{{ route('GroupIndex.index') }}" 
+       class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
+        <i class="fas fa-users mr-2"></i> <!-- Person Icon -->
+        Groups
+    </a>
+</li>
     <a href="{{ route('cars.index') }}" 
        class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
         <i class="fas fa-bus mr-2"></i> <!-- Bus Icon -->

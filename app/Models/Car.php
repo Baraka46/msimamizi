@@ -54,7 +54,7 @@ class Car extends Model
     {
         return $this->hasMany(Service::class);
     }
-    public function carGroup()
+    public function CarGroup()
     {
         return $this->hasOne(CarGroup::class);
     }
