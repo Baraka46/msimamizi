@@ -20,6 +20,10 @@ class DailyHesabuController extends Controller
 
     // Get the logged-in supervisor's ID
     $supervisorId = auth()->user()->id;
+    $weekly =Car::where('assigned_supervisor_id', $supervisorId)
+        ->with('dailyHesabus')
+        ->get();
+
 
     // Cars assigned to the supervisor that have not been filled today
     $unfilledCars = Car::where('assigned_supervisor_id', $supervisorId)
@@ -42,6 +46,7 @@ class DailyHesabuController extends Controller
     return view('components.hesabu.addHesabu', [
         'unfilledCars' => $unfilledCars,
         'filledCars' => $filledCars,
+        'weekly'=>$weekly,
     ]);
 }
 

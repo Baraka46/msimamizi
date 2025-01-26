@@ -29,17 +29,20 @@ class GroupExpenseController extends Controller
     /**
      * Store a newly created expense in storage.
      */
-    public function store(Request $request, CarGroup$group)
+    public function store(Request $request, CarGroup $group)
     {
         $validatedData = $request->validate([
+            'car_group_id'=> 'required|exists:car_groups,id',
             'name' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
-            'description' => 'nullable|string',
+            'start_date'=> 'required|date',
+            'collection_interval' => 'required|integer|min:1',
+
         ]);
 
         $group->groupExpenses()->create($validatedData);
 
-        return redirect()->route('cars.group.expenses.index', $group)
+        return redirect()->route('expenses.index', $group)
                          ->with('success', 'Expense added successfully.');
     }
 

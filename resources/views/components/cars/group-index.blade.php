@@ -16,51 +16,50 @@
             </a>
         </div>
 
-        <!-- Groups Table -->
-        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <table class="min-w-full">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cars</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                    @forelse ($carGroups as $group)
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $group->name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $group->description ?? 'N/A' }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                @if ($group->cars->count() > 0)
-                                    <ul class="list-disc list-inside">
-                                        @foreach ($group->cars as $car)
-                                            <li>{{ $car->plate_number }} ({{ $car->route}})</li>
-                                        @endforeach
-                                    </ul>
-                                @else
-                                    No cars assigned.
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex space-x-2">
-                                    <a href="" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Edit</a>
-                                    <form action="" method="POST" onsubmit="return confirm('Are you sure you want to delete this group?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">Delete</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="px-6 py-4 text-center text-gray-500">No car groups found.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+        <!-- Groups and Expenses -->
+        <div class="space-y-6">
+            @forelse ($carGroups as $group)
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <!-- Group Header -->
+                    <h2 class="text-xl font-semibold mb-4">{{ $group->name }}</h2>
+                    <p class="text-gray-500 mb-4">{{ $group->description ?? 'No description provided.' }}</p>
+
+                    <!-- Cars -->
+                    <h3 class="text-lg font-semibold mb-2">Cars</h3>
+                    @if ($group->cars->count() > 0)
+                        <ul class="list-disc list-inside mb-4">
+                            @foreach ($group->cars as $car)
+                                <li>{{ $car->plate_number }} ({{ $car->route }})</li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="text-gray-500 mb-4">No cars assigned to this group.</p>
+                    @endif
+
+                    <!-- Expenses -->
+                    <h3 class="text-lg font-semibold mb-2">Expenses</h3>
+                    @if ($group->groupExpenses->count() > 0)
+                        <ul class="list-disc list-inside mb-4">
+                            @foreach ($group->groupExpenses as $expense)
+                                <li>
+                                    <span class="font-medium">{{ $expense->name }}</span> - 
+                                    ${{ number_format($expense->amount, 2) }} 
+                                    <span class="text-gray-500">({{ $expense->description ?? 'No description' }})</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="text-gray-500 mb-4">No expenses recorded for this group.</p>
+                    @endif
+
+                    <!-- Add Expense Button -->
+                    <a href="{{ route('expenses.create', $group->id) }}" class="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        Add Expense
+                    </a>
+                </div>
+            @empty
+                <div class="text-gray-500 text-center">No car groups found.</div>
+            @endforelse
         </div>
     </div>
 </x-app-layout>

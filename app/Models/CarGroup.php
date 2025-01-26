@@ -17,7 +17,7 @@ class CarGroup extends Model
     }
     public function groupExpenses()
 {
-    return $this->hasMany(GroupExpense::class, 'group_id');
+    return $this->hasMany(GroupExpense::class, 'car_group_id');
 }
 
 }

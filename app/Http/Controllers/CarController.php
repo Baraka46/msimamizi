@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Models\CarGroup;
+use App\Models\GroupExpense;
 
 class CarController extends Controller
 {
@@ -195,17 +196,19 @@ public function GroupIndex(Request $request)
 
     if ($user->isOwner()) {
         $carGroups = CarGroup::where('company_id', $user->company_id)
-            ->with('cars') // Assuming the relationship exists
+            ->with(['cars', 'groupExpenses']) // Load both relationships
             ->get();
     } elseif ($user->isSupervisor()) {
         $carGroups = CarGroup::whereHas('cars', function ($query) use ($user) {
             $query->where('assigned_supervisor_id', $user->id);
-        })->with('cars')->get();
+        })->with(['cars', 'groupExpenses']) // Load both relationships
+        ->get();
     } else {
         $carGroups = collect(); // No groups if the role doesn't match
     }
 
     return view('components.cars.group-index', compact('carGroups'));
 }
+
 
 }

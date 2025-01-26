@@ -5,6 +5,9 @@
         <form action="{{ route('expenses.store', $group) }}" method="POST">
             @csrf
 
+            <!-- Car Group ID (Hidden Input) -->
+            <input type="hidden" name="car_group_id" value="{{ $group->id }}">
+
             <!-- Expense Name -->
             <div class="mb-4">
                 <label for="name" class="block text-sm font-medium text-gray-700">Expense Name</label>
@@ -18,9 +21,18 @@
             </div>
 
             <!-- Expense Description -->
+          
+
+            <!-- Start Date -->
             <div class="mb-4">
-                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                <textarea name="description" id="description" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" rows="3"></textarea>
+                <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date</label>
+                <input type="date" name="start_date" id="start_date" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+            </div>
+
+            <!-- Collection Interval -->
+            <div class="mb-4">
+                <label for="collection_interval" class="block text-sm font-medium text-gray-700">Collection Interval (Days)</label>
+                <input type="number" name="collection_interval" id="collection_interval" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" min="1" required>
             </div>
 
             <!-- Buttons -->
