@@ -18,19 +18,21 @@ class GroupExpenseController extends Controller
         return view('components.cars.expense-index', compact('group', 'expenses'));
     }
 
-    /**
-     * Show the form for creating a new expense for a specific group.
-     */
+  
     public function create(CarGroup $group)
     {
-        return view(' components.cars.expense-create', compact('group'));
+       
+        return view('components.cars.expense-create', compact('group'));
     }
+    
 
     /**
      * Store a newly created expense in storage.
      */
     public function store(Request $request, CarGroup $group)
     {
+        $carGroupId = $request->car_group_id;
+        $group = CarGroup::findOrFail($carGroupId);
         $validatedData = $request->validate([
             'car_group_id'=> 'required|exists:car_groups,id',
             'name' => 'required|string|max:255',
@@ -39,8 +41,10 @@ class GroupExpenseController extends Controller
             'collection_interval' => 'required|integer|min:1',
 
         ]);
-
-        $group->groupExpenses()->create($validatedData);
+        
+       $group->groupExpenses()->create($validatedData);
+        
+       
 
         return redirect()->route('expenses.index', $group)
                          ->with('success', 'Expense added successfully.');

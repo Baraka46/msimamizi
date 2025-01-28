@@ -12,6 +12,6 @@ class GroupExpense extends Model
 
     public function carGroup()
     {
-        return $this->belongsTo(CarGroup::class, 'group_id');
+        return $this->belongsTo(CarGroup::class, 'car_group_id');
     }
 }
