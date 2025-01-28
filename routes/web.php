@@ -38,7 +38,7 @@ Route::get('cars/group/index',[CarController::class, 'GroupIndex'])->name('Group
 
 Route::resource('cars/group/expenses', GroupExpenseController::class)->shallow();
 Route::get('/cars/group/expenses/create/{group}', [GroupExpenseController::class, 'create'])->name('expenses.create');
- 
+Route::get('/cars/group/expenses/index/{group}', [GroupExpenseController::class, 'index'])->name('expenses.index');
 
 
 });

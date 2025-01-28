@@ -38,20 +38,21 @@
 
                     <!-- Expenses -->
                     <h3 class="text-lg font-semibold mb-2">Expenses</h3>
+                    <a href="{{ route('expenses.index', $group->id) }}">
                     @if ($group->groupExpenses->count() > 0)
                         <ul class="list-disc list-inside mb-4">
                             @foreach ($group->groupExpenses as $expense)
                                 <li>
                                     <span class="font-medium">{{ $expense->name }}</span> - 
-                                    ${{ number_format($expense->amount, 2) }} 
-                                    <span class="text-gray-500">({{ $expense->description ?? 'No description' }})</span>
+                                    {{ number_format($expense->amount) }} 
+                                    <span class="">{{ $expense->collection_interval ?? 'No description' }} days</span>
                                 </li>
                             @endforeach
                         </ul>
                     @else
                         <p class="text-gray-500 mb-4">No expenses recorded for this group.</p>
                     @endif
-
+                    </a>
                     <!-- Add Expense Button -->
                     <a href="{{ route('expenses.create', $group->id) }}" class="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                         Add Expense
