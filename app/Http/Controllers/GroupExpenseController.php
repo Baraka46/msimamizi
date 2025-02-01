@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\GroupExpense;
 use Illuminate\Http\Request;
 use App\Models\CarGroup;
+use Carbon\Carbon;
+
 
 class GroupExpenseController extends Controller
 {
@@ -55,7 +57,16 @@ class GroupExpenseController extends Controller
      */
     public function show(GroupExpense $expense)
     {
-        return view('components.cars.expense-show', compact('expense'));
+        $startDate = Carbon::parse($expense->start_date);
+        $today = Carbon::today();
+        $interval = $expense->collection_interval;
+    
+        while ($startDate->lte($today)) {
+            $startDate->addDays($interval);
+        }
+    
+        $nextCollectionDate = $startDate->toFormattedDateString();
+        return view('components.cars.expense-show', compact('expense','nextCollectionDate'));
     }
 
     /**

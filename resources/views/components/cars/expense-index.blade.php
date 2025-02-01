@@ -28,19 +28,24 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    @forelse ($expenses as $expense)
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $expense->name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ number_format($expense->amount) }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $expense->collection_interval }} days</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $expense->start_date }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="px-6 py-4 text-center text-gray-500">No expenses found.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
+    @forelse ($expenses as $expense)
+        <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-semi-bold">
+                <a href="{{ route('expenses.show', $expense->id) }}" class="text-indigo-600 hover:underline">
+                    {{ $expense->name }}
+                </a>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ number_format($expense->amount) }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $expense->collection_interval }} days</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $expense->start_date }}</td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="4" class="px-6 py-4 text-center text-gray-500">No expenses found.</td>
+        </tr>
+    @endforelse
+</tbody>
+
             </table>
         </div>
     </div>
