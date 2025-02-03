@@ -21,14 +21,15 @@ return new class extends Migration
             $table->timestamps();
         });
            //
-
            Schema::create('contributions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('group_expense_id')->constrained('group_expenses')->onDelete('cascade');
             $table->decimal('amount', 10, 2); // Amount contributed
-            $table->date('contribution_date'); // Actual date the money was given
+            $table->date('intended_collection_date')->nullable(); // Scheduled date (optional if computed)
+            $table->date('actual_collection_date'); // Actual date the money was given
             $table->timestamps();
         });
+        
         
     }
 
