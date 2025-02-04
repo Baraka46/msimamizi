@@ -9,6 +9,7 @@ use App\Http\Controllers\DailyHesabuController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\GroupExpenseController;
+use App\Http\Controllers\ContributionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,6 +40,8 @@ Route::get('cars/group/index',[CarController::class, 'GroupIndex'])->name('Group
 Route::resource('cars/group/expenses', GroupExpenseController::class)->shallow();
 Route::get('/cars/group/expenses/create/{group}', [GroupExpenseController::class, 'create'])->name('expenses.create');
 Route::get('/cars/group/expenses/index/{group}', [GroupExpenseController::class, 'index'])->name('expenses.index');
+Route::resource('expenses.contributions', ContributionController::class);
+
 
 
 });

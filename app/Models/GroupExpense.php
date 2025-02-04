@@ -14,4 +14,8 @@ class GroupExpense extends Model
     {
         return $this->belongsTo(CarGroup::class, 'car_group_id');
     }
+    public function contributions()
+    {
+        return $this->hasMany(Contributions::class, 'group_expense_id');
+    }
 }
