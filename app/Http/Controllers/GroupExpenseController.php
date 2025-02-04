@@ -56,18 +56,23 @@ class GroupExpenseController extends Controller
      * Display the specified expense.
      */
     public function show(GroupExpense $expense)
-    {
-        $startDate = Carbon::parse($expense->start_date);
-        $today = Carbon::today();
-        $interval = $expense->collection_interval;
-    
-        while ($startDate->lte($today)) {
-            $startDate->addDays($interval);
-        }
-    
-        $nextCollectionDate = $startDate->toFormattedDateString();
-        return view('components.cars.expense-show', compact('expense','nextCollectionDate'));
+{
+    $startDate = Carbon::parse($expense->start_date);
+    $today = Carbon::today();
+    $interval = $expense->collection_interval;
+
+    while ($startDate->lte($today)) {
+        $startDate->addDays($interval);
     }
+
+    $nextCollectionDate = $startDate->toFormattedDateString();
+
+    // Fetch recent contributions (latest 5)
+    $recentContributions = $expense->contributions()->latest()->take(5)->get();
+
+    return view('components.cars.expense-show', compact('expense', 'nextCollectionDate', 'recentContributions'));
+}
+
 
     /**
      * Show the form for editing the specified expense.
