@@ -11,7 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::create('inhouse_maintenance_payments', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('maintenance_id')->constrained('inhouse_maintenance')->onDelete('cascade');
+            $table->decimal('amount', 10, 2);
+            $table->date('payment_date')->default(now());
+            $table->timestamps();
+        });
     }
 
     /**
@@ -19,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+          Schema::dropIfExists('inhouse_maintenance_payments');
     }
 };
