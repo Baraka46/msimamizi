@@ -10,6 +10,7 @@ use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\GroupExpenseController;
 use App\Http\Controllers\ContributionController;
+use App\Http\Controllers\InHouseMaintenanceController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -85,6 +86,8 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('maintenances', MaintenanceController::class);
 Route::post('/maintenances/store-multiple', [MaintenanceController::class, 'storeMultiple'])->name('maintenances.storeMultiple');
+
+Route::resource('in-house-maintenance', InHouseMaintenanceController::class);
 
 
 
