@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class InHouseMaintanancePayment extends Model
+class InHouseMaintenancePayment extends Model
 {
     use HasFactory;
 
@@ -13,6 +13,6 @@ class InHouseMaintanancePayment extends Model
 
     public function inHouseMaintanance()
     {
-        return $this->belongsTo(InHouseMaintanance::class);
+        return $this->belongsTo(InHouseMaintenance::class);
     }
 }

@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
+use App\Models\InHouseMaintenance;
+
+use App\Models\InHouseMaintenancePayment;
 
 class InHouseMaintenanceController extends Controller
 {
@@ -12,7 +16,7 @@ class InHouseMaintenanceController extends Controller
     public function index()
     {
         // Get all payments
-        $payments = InhouseMaintenancePayment::latest()->paginate(10);
+        $payments = InHouseMaintenancePayment::latest()->paginate(10);
         return view('inhouse_payments.index', compact('payments'));
     }
 
@@ -22,8 +26,8 @@ class InHouseMaintenanceController extends Controller
     public function create()
     {
         // Show a form to make a payment
-        $maintenances = InhouseMaintenance::where('remaining_balance', '>', 0)->get();
-        return view('inhouse_payments.create', compact('maintenances'));
+        $maintenances = InHouseMaintenance::where('outstanding_balance', '>', 0)->get();
+        return view('components.inhouse_payments.create', compact('maintenances'));
     }
 
     /**
@@ -32,42 +36,25 @@ class InHouseMaintenanceController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'amount' => 'required|numeric|min:1',
+            'car_id' => 'required|exists:cars,id',
+            'item_name' => 'required|array',
+            'item_name.*' => 'required|string|max:255',
+            'cost' => 'required|array',
+            'cost.*' => 'required|numeric|min:0',
         ]);
-
-        $amountToPay = $validated['amount'];
-
-        // Get total outstanding balance
-        $totalOutstanding = InhouseMaintenance::where('remaining_balance', '>', 0)->sum('remaining_balance');
-
-        if ($totalOutstanding <= 0) {
-            return back()->with('error', 'No outstanding balance to pay.');
-        }
-
-        // Get all unpaid in-house maintenance records
-        $unpaidMaintenances = InhouseMaintenance::where('remaining_balance', '>', 0)->get();
-
-        foreach ($unpaidMaintenances as $maintenance) {
-            $percentage = $maintenance->remaining_balance / $totalOutstanding;
-            $amountAllocated = round($amountToPay * $percentage, 2);
-
-            if ($amountAllocated > $maintenance->remaining_balance) {
-                $amountAllocated = $maintenance->remaining_balance;
-            }
-
-            $maintenance->remaining_balance -= $amountAllocated;
-            $maintenance->save();
-
-            // Save the payment record
-            InhouseMaintenancePayment::create([
-                'maintenance_id' => $maintenance->id,
-                'amount' => $amountAllocated,
-                'payment_date' => now(),
+    
+        // Loop through and save multiple items
+        foreach ($validated['item_name'] as $index => $name) {
+            InHouseMaintenance::create([
+                'car_id' => $validated['car_id'],
+                'item_name' => $name,
+                'cost' => $validated['cost'][$index],
             ]);
         }
-
-        return back()->with('success', 'Payment recorded successfully!');
+    
+        return back()->with('success', 'Items saved successfully!');
     }
+    
 
     /**
      * Display the specified resource.
@@ -75,7 +62,7 @@ class InHouseMaintenanceController extends Controller
     public function show(string $id)
     {
         // Show payment details
-        $payment = InhouseMaintenancePayment::findOrFail($id);
+        $payment = InHouseMaintenancePayment::findOrFail($id);
         return view('inhouse_payments.show', compact('payment'));
     }
 
@@ -85,7 +72,7 @@ class InHouseMaintenanceController extends Controller
     public function edit(string $id)
     {
         // Edit a payment
-        $payment = InhouseMaintenancePayment::findOrFail($id);
+        $payment = InHouseMaintenancePayment::findOrFail($id);
         return view('inhouse_payments.edit', compact('payment'));
     }
 
@@ -98,7 +85,7 @@ class InHouseMaintenanceController extends Controller
             'amount' => 'required|numeric|min:1',
         ]);
 
-        $payment = InhouseMaintenancePayment::findOrFail($id);
+        $payment = InHouseMaintenancePayment::findOrFail($id);
         $payment->amount = $validated['amount'];
         $payment->save();
 
@@ -110,7 +97,7 @@ class InHouseMaintenanceController extends Controller
      */
     public function destroy(string $id)
     {
-        $payment = InhouseMaintenancePayment::findOrFail($id);
+        $payment = InHouseMaintenancePayment::findOrFail($id);
         $payment->delete();
 
         return redirect()->route('inhouse_payments.index')->with('success', 'Payment deleted successfully!');
@@ -124,14 +111,14 @@ class InHouseMaintenanceController extends Controller
         $amountToPay = $validated['amount'];
     
         // Get total outstanding balance
-        $totalOutstanding = InhouseMaintenance::where('remaining_balance', '>', 0)->sum('remaining_balance');
+        $totalOutstanding = InHouseMaintenance::where('remaining_balance', '>', 0)->sum('remaining_balance');
     
         if ($totalOutstanding <= 0) {
             return back()->with('error', 'No outstanding balance to pay.');
         }
     
         // Get all unpaid in-house maintenance records
-        $unpaidMaintenances = InhouseMaintenance::where('remaining_balance', '>', 0)->get();
+        $unpaidMaintenances = InHouseMaintenance::where('remaining_balance', '>', 0)->get();
     
         foreach ($unpaidMaintenances as $maintenance) {
             // Calculate the percentage of debt this maintenance holds
@@ -150,7 +137,7 @@ class InHouseMaintenanceController extends Controller
         }
     
         // Recalculate total owed
-        $totalOwed = InhouseMaintenance::sum('remaining_balance');
+        $totalOwed = InHouseMaintenance::sum('remaining_balance');
         InhouseTotalOwed::where('id', 1)->update(['total_owed' => $totalOwed]);
     
         return back()->with('success', 'Payment distributed successfully!');
