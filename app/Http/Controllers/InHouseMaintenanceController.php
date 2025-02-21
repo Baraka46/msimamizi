@@ -30,7 +30,46 @@ class InHouseMaintenanceController extends Controller
     /**
      * Show the form for creating a new maintenance record.
      */
-   
+    public function create()
+    {
+        // Get cars assigned to the logged-in supervisor
+        $cars = Car::where('assigned_supervisor_id', Auth::id())->get();
+
+        // If no cars are assigned, redirect with a message
+        if ($cars->isEmpty()) {
+            return redirect()->route('dashboard')->with('info', 'No cars are assigned to you.');
+        }
+
+        return view('components.inhouse_payments.create', compact('cars'));
+    }
+
+    /**
+     * Store multiple maintenance records at once.
+     */
+    public function storeMultiple(Request $request)
+    {
+        $validated = $request->validate([
+            'car_id' => 'required|exists:cars,id',
+            'maintenances' => 'required|array',
+            'maintenances.*.item_name' => 'required|string|max:255',
+            'maintenances.*.cost' => 'required|numeric|min:0',
+            'maintenances.*.description' => 'nullable|string',
+            'maintenances.*.date' => 'required|date',
+        ]);
+
+        foreach ($validated['maintenances'] as $maintenance) {
+            InHouseMaintenance::create([
+                'car_id' => $validated['car_id'],
+                'item_name' => $maintenance['item_name'],
+                'cost' => $maintenance['cost'],
+                'description' => $maintenance['description'] ?? null,
+                'date' => $maintenance['date'],
+            ]);
+        }
+
+        return redirect()->route('inhouse_maintenances.index')->with('success', 'Maintenance records saved successfully!');
+    }
+
     /**
      * Display a specific maintenance record.
      */
