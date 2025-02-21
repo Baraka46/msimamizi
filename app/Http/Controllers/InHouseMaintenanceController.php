@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\InHouseMaintenance;
-
+use App\Models\Car;
 use App\Models\InHouseMaintenancePayment;
+use Illuminate\Support\Facades\Auth;
 
 class InHouseMaintenanceController extends Controller
 {
@@ -15,92 +16,66 @@ class InHouseMaintenanceController extends Controller
      */
     public function index()
     {
-        // Get all payments
-        $payments = InHouseMaintenancePayment::latest()->paginate(10);
-        return view('inhouse_payments.index', compact('payments'));
+        // Get all in-house maintenance records for cars assigned to the logged-in supervisor
+        $inhouseMaintenances = InHouseMaintenance::whereHas('car', function ($query) {
+            $query->where('assigned_supervisor_id', Auth::id());
+        })->with('car')->latest()->get();
+
+        // Get the list of cars assigned to the supervisor
+        $cars = Car::where('assigned_supervisor_id', Auth::id())->with('maintenances')->get();
+
+        return view('components.inhouse_maintenances.index', compact('inhouseMaintenances', 'cars'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new maintenance record.
      */
-    public function create()
-    {
-        // Show a form to make a payment
-        $maintenances = InHouseMaintenance::where('outstanding_balance', '>', 0)->get();
-        return view('components.inhouse_payments.create', compact('maintenances'));
-    }
-
+   
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'car_id' => 'required|exists:cars,id',
-            'item_name' => 'required|array',
-            'item_name.*' => 'required|string|max:255',
-            'cost' => 'required|array',
-            'cost.*' => 'required|numeric|min:0',
-        ]);
-    
-        // Loop through and save multiple items
-        foreach ($validated['item_name'] as $index => $name) {
-            InHouseMaintenance::create([
-                'car_id' => $validated['car_id'],
-                'item_name' => $name,
-                'cost' => $validated['cost'][$index],
-            ]);
-        }
-    
-        return back()->with('success', 'Items saved successfully!');
-    }
-    
-
-    /**
-     * Display the specified resource.
+     * Display a specific maintenance record.
      */
     public function show(string $id)
     {
-        // Show payment details
-        $payment = InHouseMaintenancePayment::findOrFail($id);
-        return view('inhouse_payments.show', compact('payment'));
+        $maintenance = InHouseMaintenance::with('car')->findOrFail($id);
+        return view('components.inhouse_maintenances.show', compact('maintenance'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing an existing maintenance record.
      */
     public function edit(string $id)
     {
-        // Edit a payment
-        $payment = InHouseMaintenancePayment::findOrFail($id);
-        return view('inhouse_payments.edit', compact('payment'));
+        $maintenance = InHouseMaintenance::findOrFail($id);
+        return view('components.inhouse_maintenances.edit', compact('maintenance'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update a specific maintenance record.
      */
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
-            'amount' => 'required|numeric|min:1',
+            'item_name' => 'required|string|max:255',
+            'cost' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+            'date' => 'required|date',
         ]);
 
-        $payment = InHouseMaintenancePayment::findOrFail($id);
-        $payment->amount = $validated['amount'];
-        $payment->save();
+        $maintenance = InHouseMaintenance::findOrFail($id);
+        $maintenance->update($validated);
 
-        return redirect()->route('inhouse_payments.index')->with('success', 'Payment updated successfully!');
+        return redirect()->route('inhouse_maintenances.index')->with('success', 'Maintenance record updated successfully!');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete a maintenance record.
      */
     public function destroy(string $id)
     {
-        $payment = InHouseMaintenancePayment::findOrFail($id);
-        $payment->delete();
+        $maintenance = InHouseMaintenance::findOrFail($id);
+        $maintenance->delete();
 
-        return redirect()->route('inhouse_payments.index')->with('success', 'Payment deleted successfully!');
+        return redirect()->route('inhouse_maintenances.index')->with('success', 'Maintenance record deleted successfully!');
     }
     public function makePayment(Request $request)
     {

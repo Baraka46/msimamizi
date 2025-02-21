@@ -23,33 +23,52 @@
                 <select name="category_id" id="category_id" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
                     <option value="">-- Select --</option>
                     @foreach ($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
                     @endforeach
                 </select>
+                @error('category_id') 
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p> 
+                @enderror
             </div>
 
             {{-- Records Section --}}
             <div id="records-entries">
                 <div class="record-entry mb-6 p-4 border rounded-lg shadow-md" data-index="0">
-                    <h5 class="text-lg font-semibold mb-4">Record Entry</h5>
+                    <h5 class="text-lg font-semibold mb-4">Record Entry <span class="entry-number">1</span></h5>
 
                     {{-- Name --}}
                     <div class="mb-4">
-                        <label for="records[0][name]" class="block text-sm font-medium text-gray-700">Name</label>
-                        <input type="text" name="records[0][name]" class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                        <label class="block text-sm font-medium text-gray-700">Name</label>
+                        <input type="text" name="records[0][name]" value="{{ old('records.0.name') }}" 
+                               class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                        @error('records.0.name') 
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p> 
+                        @enderror
                     </div>
 
                     {{-- Value --}}
                     <div class="mb-4">
-                        <label for="records[0][value]" class="block text-sm font-medium text-gray-700">Value</label>
-                        <input type="number" name="records[0][value]" class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                        <label class="block text-sm font-medium text-gray-700">Value</label>
+                        <input type="number" name="records[0][value]" value="{{ old('records.0.value') }}" 
+                               class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                        @error('records.0.value') 
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p> 
+                        @enderror
                     </div>
 
                     {{-- Description --}}
                     <div class="mb-4">
-                        <label for="records[0][description]" class="block text-sm font-medium text-gray-700">Description (Optional)</label>
-                        <textarea name="records[0][description]" class="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" rows="2"></textarea>
+                        <label class="block text-sm font-medium text-gray-700">Description (Optional)</label>
+                        <textarea name="records[0][description]" class="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" rows="2">{{ old('records.0.description') }}</textarea>
+                        @error('records.0.description') 
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p> 
+                        @enderror
                     </div>
+
+                    {{-- Remove Button --}}
+                    <button type="button" class="remove-entry text-red-500 hover:text-red-700 mt-4 hidden">Remove Entry</button>
                 </div>
             </div>
 
@@ -70,29 +89,54 @@
         document.getElementById('add-entry').addEventListener('click', function () {
             const index = document.querySelectorAll('.record-entry').length;
             const entryHtml = `
-                <div class="record-entry mb-6 p-4 border rounded-lg shadow-md" data-index="${index}">
-                    <h5 class="text-lg font-semibold mb-4">Record Entry</h5>
+                <div class="record-entry mb-6 p-4 border rounded-lg shadow-md" data-index="\${index}">
+                    <h5 class="text-lg font-semibold mb-4">Record Entry <span class="entry-number">\${index + 1}</span></h5>
+                    
                     <div class="mb-4">
-                        <label for="records[${index}][name]" class="block text-sm font-medium text-gray-700">Name</label>
-                        <input type="text" name="records[${index}][name]" class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                        <label class="block text-sm font-medium text-gray-700">Name</label>
+                        <input type="text" name="records[\${index}][name]" class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
                     </div>
+
                     <div class="mb-4">
-                        <label for="records[${index}][value]" class="block text-sm font-medium text-gray-700">Value</label>
-                        <input type="number" name="records[${index}][value]" class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                        <label class="block text-sm font-medium text-gray-700">Value</label>
+                        <input type="number" name="records[\${index}][value]" class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
                     </div>
+
                     <div class="mb-4">
-                        <label for="records[${index}][description]" class="block text-sm font-medium text-gray-700">Description (Optional)</label>
-                        <textarea name="records[${index}][description]" class="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" rows="2"></textarea>
+                        <label class="block text-sm font-medium text-gray-700">Description (Optional)</label>
+                        <textarea name="records[\${index}][description]" class="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" rows="2"></textarea>
                     </div>
+
                     <button type="button" class="remove-entry text-red-500 hover:text-red-700 mt-4">Remove Entry</button>
                 </div>`;
             document.getElementById('records-entries').insertAdjacentHTML('beforeend', entryHtml);
+            updateRemoveButtons();
         });
 
         document.addEventListener('click', function (e) {
             if (e.target && e.target.classList.contains('remove-entry')) {
                 e.target.closest('.record-entry').remove();
+                updateEntryNumbers();
+                updateRemoveButtons();
             }
         });
+
+        function updateEntryNumbers() {
+            document.querySelectorAll('.record-entry').forEach((entry, index) => {
+                entry.setAttribute('data-index', index);
+                entry.querySelector('.entry-number').textContent = index + 1;
+                entry.querySelector('input[name^="records"]').setAttribute('name', `records[${index}][name]`);
+                entry.querySelector('input[name^="records"]').setAttribute('name', `records[${index}][value]`);
+                entry.querySelector('textarea[name^="records"]').setAttribute('name', `records[${index}][description]`);
+            });
+        }
+
+        function updateRemoveButtons() {
+            const entries = document.querySelectorAll('.record-entry');
+            entries.forEach((entry, index) => {
+                const removeButton = entry.querySelector('.remove-entry');
+                removeButton.classList.toggle('hidden', index === 0);
+            });
+        }
     </script>
 </x-app-layout>
