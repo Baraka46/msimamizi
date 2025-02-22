@@ -17,14 +17,18 @@ class InHouseMaintenanceController extends Controller
     public function index()
     {
         // Get all in-house maintenance records for cars assigned to the logged-in supervisor
-        $inhouseMaintenances = InHouseMaintenance::whereHas('car', function ($query) {
-            $query->where('assigned_supervisor_id', Auth::id());
-        })->with('car')->latest()->get();
+        $cars = Car::where('assigned_supervisor_id', Auth::id())->get();
 
-        // Get the list of cars assigned to the supervisor
-        $cars = Car::where('assigned_supervisor_id', Auth::id())->with('maintenances')->get();
+        // Calculate total maintenance per car
+        $cars->map(function ($car) {
+            $car->total_maintenance = InHouseMaintenance::where('car_id', $car->id)->sum('outstanding_balance');
+            return $car;
+        });
+    
+        // Calculate the grand total for all cars
+        $totalMaintenance = $cars->sum('total_maintenance');
 
-        return view('components.inhouse_maintenances.index', compact('inhouseMaintenances', 'cars'));
+        return view('components.inhouse_payments.index', compact('totalMaintenance', 'cars'));
     }
 
     /**
