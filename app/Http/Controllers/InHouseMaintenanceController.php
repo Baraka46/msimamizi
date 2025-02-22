@@ -67,7 +67,7 @@ class InHouseMaintenanceController extends Controller
             ]);
         }
 
-        return redirect()->route('inhouse_maintenances.index')->with('success', 'Maintenance records saved successfully!');
+        return redirect()->route('in-house-maintenance.index')->with('success', 'Maintenance records saved successfully!');
     }
 
     /**
