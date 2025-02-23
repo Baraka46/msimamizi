@@ -45,11 +45,8 @@
                         <input type="number" name="maintenances[0][cost]" step="0.01" class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
                     </div>
 
-                    {{-- Description --}}
-                    <div class="mb-4">
-                        <label for="maintenances[0][description]" class="block text-sm font-medium text-gray-700">Description (Optional)</label>
-                        <textarea name="maintenances[0][description]" class="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" rows="2"></textarea>
-                    </div>
+                   
+                  
 
                     {{-- Date --}}
                     <div class="mb-4">

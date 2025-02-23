@@ -57,7 +57,7 @@ class InHouseMaintenanceController extends Controller
             'maintenances' => 'required|array',
             'maintenances.*.item_name' => 'required|string|max:255',
             'maintenances.*.cost' => 'required|numeric|min:0',
-            'maintenances.*.description' => 'nullable|string',
+          
             'maintenances.*.date' => 'required|date',
         ]);
 
@@ -67,7 +67,7 @@ class InHouseMaintenanceController extends Controller
                 'item_name' => $maintenance['item_name'],
                 'cost' => $maintenance['cost'],
                 'outstanding_balance' => $maintenance['cost'],
-                'description' => $maintenance['description'] ?? null,
+                
                 'date' => $maintenance['date'],
             ]);
         }

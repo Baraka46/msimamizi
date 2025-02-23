@@ -10,7 +10,7 @@ class InHouseMaintenance extends Model
     use HasFactory;
     protected $table = 'inhouse_maintenance';
 
-    protected $fillable = ['car_id', 'item_name', 'cost'];
+    protected $fillable = ['car_id', 'item_name', 'cost','outstanding_balance'];
 
     public function car()
     {
