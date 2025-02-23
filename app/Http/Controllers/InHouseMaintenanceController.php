@@ -66,6 +66,7 @@ class InHouseMaintenanceController extends Controller
                 'car_id' => $validated['car_id'],
                 'item_name' => $maintenance['item_name'],
                 'cost' => $maintenance['cost'],
+                'outstanding_balance' => $maintenance['cost'],
                 'description' => $maintenance['description'] ?? null,
                 'date' => $maintenance['date'],
             ]);
