@@ -89,6 +89,7 @@ Route::post('/maintenances/store-multiple', [MaintenanceController::class, 'stor
 
 Route::resource('in-house-maintenance', InHouseMaintenanceController::class);
 Route::post('/in-house-maintenance/store-multiple', [ InHouseMaintenanceController::class, 'storeMultiple'])->name('in-house-maintenances.storeMultiple');
+Route::post('/in-house-maintenance/payment', [ InHouseMaintenanceController::class,'makePayment'])->name('makePayment');
 
 
 
