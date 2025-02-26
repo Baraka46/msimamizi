@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('inhouse_maintenance_payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('maintenance_id')->constrained('inhouse_maintenance')->onDelete('cascade');
             $table->decimal('amount', 10, 2);
             $table->date('payment_date')->default(now());
             $table->timestamps();

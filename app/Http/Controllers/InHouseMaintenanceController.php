@@ -156,9 +156,9 @@ class InHouseMaintenanceController extends Controller
             $maintenance->save();
     
             // Store the payment in a payments table (if you have one)
-            Payment::create([
-                'inhouse_maintenance_id' => $maintenance->id,
-                'amount_paid' => $amountAllocated,
+            InHouseMaintenancePayment::create([
+               
+                'amount' => $amountAllocated,
                 'date' => now(),
             ]);
         }

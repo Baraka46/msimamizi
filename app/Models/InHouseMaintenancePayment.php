@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class InHouseMaintenancePayment extends Model
 {
     use HasFactory;
+    protected $table ='inhouse_maintenance_payments';
 
-    protected $fillable = ['amount'];
+    protected $fillable = [ 'amount','payment_date'];
 
     public function inHouseMaintanance()
     {
