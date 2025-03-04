@@ -38,6 +38,13 @@ class Car extends Model
     {
         return $this->hasMany(Maintenance::class);
     }
+
+
+
+    public function inhouse_maintenance()
+    {
+        return $this->hasMany(InHouseMaintenance::class);
+    }
     /**
      * Scope to restrict car access to the owner of the company.
      */

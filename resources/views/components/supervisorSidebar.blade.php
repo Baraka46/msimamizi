@@ -76,42 +76,40 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li>
             <a href="#" 
-       onclick="toggleDropdown(event)" 
-       class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
-        <i class="fas fa-bus"></i>
-        <span>Bus Management</span>
-        <i class=""></i>
-    </a>
+   onclick="toggleDropdown(event, 'bus-management-dropdown')" 
+   class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
+    <i class="fas fa-bus"></i>
+    <span>Bus Management</span>
+   
+</a>
 
-    <!-- Dropdown Items -->
-    <ul id="dropdown-menu" 
-        class="hidden flex flex-col space-y-1 pl-8 mt-2">
-        <li>
-    <a href="{{route('daily-hesabu.index')}}" 
-       class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
-       <i class="fas fa-money-bill-alt mr-2"></i>
+<!-- Dropdown Items -->
+<ul id="bus-management-dropdown" 
+    class="hidden flex flex-col space-y-1 pl-8 mt-2">
+    <li>
+        <a href="{{route('daily-hesabu.index')}}" 
+           class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
+           <i class="fas fa-money-bill-alt mr-2"></i>
+            Hesabu
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('cars.index') }}" 
+           class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
+            <i class="fas fa-bus mr-2"></i> <!-- Bus Icon -->
+            Bus
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('GroupIndex.index') }}" 
+           class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
+            <i class="fas fa-users mr-2"></i> <!-- Person Icon -->
+            Groups
+        </a>
+    </li>
+</ul>
 
-        Hesabu
-    </a>
-</li>
-<li>
-    <a href="{{ route('cars.index') }}" 
-       class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
-        <i class="fas fa-bus mr-2"></i> <!-- Bus Icon -->
-        Bus
-    </a>
-</li>
-<li>
-    <a href="{{ route('GroupIndex.index') }}" 
-       class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
-        <i class="fas fa-users mr-2"></i> <!-- Person Icon -->
-        Groups
-    </a>
-</li>
-    </ul>
-            </li>
             <li>
                 <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
                     <i class="fas fa-wallet"></i>
@@ -131,11 +129,33 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('maintenances.index') }}" class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
-                <i class="fa-solid fa-screwdriver-wrench"></i>
-                    <span>Maintanace</span>
-                </a>
-            </li>
+    <a href="#" 
+       onclick="toggleDropdown(event, 'maintenance-dropdown')" 
+       class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
+        <i class="fa-solid fa-screwdriver-wrench"></i>
+        <span>Maintenance</span>
+       
+    </a>
+
+    <!-- Dropdown Items -->
+    <ul id="maintenance-dropdown" class="hidden flex flex-col space-y-1 pl-8 mt-2">
+        <li>
+            <a href="{{route('in-house-maintenance.index')}}" 
+               class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
+                <i class="fas fa-tools mr-2"></i> <!-- Inhouse Icon -->
+                Inhouse Maintenance
+            </a>
+        </li>
+        <li>
+            <a href="{{route('maintenances.index')}}" 
+               class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
+                <i class="fas fa-wrench mr-2"></i> <!-- Outside Icon -->
+                Outside Maintenance
+            </a>
+        </li>
+    </ul>
+</li>
+
         </ul>
         </div>
     </div>

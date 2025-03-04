@@ -20,11 +20,14 @@
     </head>
     <body class="font-sans antialiased">
         <script>
-function toggleDropdown(event) {
+function toggleDropdown(event, dropdownId) {
     event.preventDefault();
-    const dropdown = document.getElementById('dropdown-menu');
-    dropdown.classList.toggle('hidden');
+    const dropdown = document.getElementById(dropdownId);
+    if (dropdown) {
+        dropdown.classList.toggle('hidden');
+    }
 }
+
 
         </script>
 

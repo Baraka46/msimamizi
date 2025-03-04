@@ -1,6 +1,10 @@
 <x-app-layout>
     <div class="max-w-6xl mx-auto px-4 py-6">
         <h2 class="text-3xl font-bold text-gray-800 mb-6">In-House Maintenance Summary</h2>
+       
+        <div class="mb-4">
+            <a href="{{ route('in-house-maintenance.create') }}" class="bg-blue-500 text-white px-2 py-2 rounded-lg hover:bg-blue-600">Add Maintenance</a>
+        </div>
 
         {{-- Display total maintenance cost for all cars --}}
         <div class="bg-blue-500 text-white p-6 rounded-lg shadow-md mb-6">
@@ -19,15 +23,21 @@
                             <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 uppercase">Car</th>
                             <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 uppercase">Total Cost (TSh)</th>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($cars as $car)
-                            <tr class="border-t hover:bg-gray-50 transition">
-                                <td class="px-6 py-4 text-gray-600">{{ $car->plate_number }}</td>
-                                <td class="px-6 py-4 text-gray-800 font-semibold">TSh {{ number_format($car->total_maintenance, 2) }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
+                   <tbody>
+    @foreach ($cars as $car)
+        <tr class="border-t hover:bg-gray-50 transition">
+            <td class="px-6 py-4 text-gray-600">
+                <a href="{{ route('in-house-maintenance.show', $car->id) }}" class="text-gray-600 hover:text-gray-800">
+                    {{ $car->plate_number }}
+                </a>
+            </td>
+            <td class="px-6 py-4 text-gray-800 font-semibold">
+                TSh {{ number_format($car->total_maintenance, 2) }}
+            </td>
+        </tr>
+    @endforeach
+</tbody>
+
                 </table>
             </div>
         </div>

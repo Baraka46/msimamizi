@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="max-w-6xl mx-auto py-8 px-6">
-        <h1 class="text-2xl font-bold mb-6">Maintenances</h1>
+        <h1 class="text-2xl font-bold mb-6"> OTside Maintenances</h1>
 
         <!-- Button to create a new maintenance -->
         <div class="mb-4">

@@ -80,10 +80,10 @@ class InHouseMaintenanceController extends Controller
      */
     public function show(string $id)
     {
-        $maintenance = InHouseMaintenance::with('car')->findOrFail($id);
-        return view('components.inhouse_maintenances.show', compact('maintenance'));
+        $car = Car::with('inhouse_maintenance')->findOrFail($id);
+        return view('components.inhouse_payments.show', compact('car'));
     }
-
+    
     /**
      * Show the form for editing an existing maintenance record.
      */
@@ -165,7 +165,7 @@ class InHouseMaintenanceController extends Controller
     
         // Recalculate total owed
         $totalOwed = InHouseMaintenance::sum('outstanding_balance');
-        InhouseTotalOwed::where('id', 1)->update(['total_owed' => $totalOwed]);
+       
     
         return back()->with('success', 'Payment distributed successfully!');
     }
