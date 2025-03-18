@@ -83,7 +83,7 @@
             <li class="relative">
     <!-- Main Dropdown Toggle -->
     <a href="#" 
-       onclick="toggleDropdown(event)" 
+    onclick="toggleDropdown(event, 'bus-management-dropdown')" 
        class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
         <i class="fas fa-bus"></i>
         <span>Bus Management</span>
@@ -91,7 +91,7 @@
     </a>
 
     <!-- Dropdown Items -->
-    <ul id="dropdown-menu" 
+    <ul id="bus-management-dropdown" 
         class="hidden flex flex-col space-y-1 pl-8 mt-2">
         <li>
     <a href="{{ route('supervisors.index') }}" 
