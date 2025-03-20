@@ -9,7 +9,7 @@ class Service extends Model
 {
     use HasFactory;
     protected $table = 'services';
-    protected $fillable = ['car_id',	'service_type',	'cost',	'date_performed',	'next_due_date' ];
+    protected $fillable = ['car_id',	'service_type',	'date_performed',	'next_due_date' ];
 
     protected $casts = [
         'date_performed' => 'datetime',
