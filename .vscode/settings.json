@@ -1,3 +1,8 @@
 {
-    "editor.fontSize": 15
+    "editor.fontSize": 15,
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#0C3508",
+        "titleBar.activeBackground": "#114A0B",
+        "titleBar.activeForeground": "#F1FDF0"
+    }
 }
