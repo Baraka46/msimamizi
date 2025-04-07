@@ -8,6 +8,8 @@ use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Models\CarGroup;
 use App\Models\GroupExpense;
+use App\Services\VehicleScraperService;
+use Illuminate\Support\Facades\Auth;
 
 class CarController extends Controller
 {
@@ -209,6 +211,52 @@ public function GroupIndex(Request $request)
 
     return view('components.cars.group-index', compact('carGroups'));
 }
+
+    
+    // Add this new function to your CarController:
+    public function scrapeCars(VehicleScraperService $scraper, Request $request)
+    {
+        $user = Auth::user();
+      
+    
+        // Build the query based on user role:
+        $carsQuery = Car::query();
+        
+        
+        if ($user->isSupervisor()) {
+            $carsQuery->where('assigned_supervisor_id', $user->id);
+        } elseif ($user->isOwner()) {
+            $carsQuery->where('company_id', $user->company_id);
+        } elseif ($user->isAdmin()) {
+            // Admin sees all cars – no additional filtering required.
+        } else {
+            abort(403, 'Unauthorized action');
+        }
+    
+        $cars = $carsQuery->get();
+    
+        // Clean up plate numbers: remove spaces and convert to lowercase.
+        $plates = $cars->pluck('plate_number')
+                       ->map(function ($plate) {
+                           return strtolower(str_replace(' ', '', $plate));
+                       })
+                       ->unique()
+                       ->values()
+                       ->toArray();
+
+                      
+    
+        try {
+            // Call your FastAPI scraper service to process the plate numbers.
+            $results = $scraper->scrapePlates($plates);
+            // Pass the scraped results to a Blade view.
+            
+            return view('components.cars.scraped', compact('results'));
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors($e->getMessage());
+        }
+    }
+    
 
 
 }

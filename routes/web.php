@@ -27,10 +27,12 @@ Route::middleware([
 });
 
 Route::middleware(['auth'])->group(function () {
+
+    
     // Car routes
     Route::resource('cars', CarController::class)->except('show');
     Route::get('/cars/create', [CarController::class, 'create'])->name('cars.create');
-
+    Route::get('/cars/scrape', [CarController::class, 'scrapeCars'])->name('cars.scrape');
     Route::get('cars/{id}', [CarController::class, 'show'])->name('cars.show'); // Show car details
     Route::get('cars/{id}/assign-supervisor', [CarController::class, 'assignSupervisorForm'])->name('cars.assign-supervisor');
 Route::patch('cars/{id}/assign-supervisor', [CarController::class, 'assignSupervisor'])->name('cars.update-supervisor');
@@ -51,6 +53,7 @@ Route::resource('expenses.contributions', ContributionController::class);
 // web.php
 
 // web.php
+
 
 
 

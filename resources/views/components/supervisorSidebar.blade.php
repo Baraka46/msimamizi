@@ -123,6 +123,12 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('cars.scrape') }}" class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Ticket</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('services.index') }}" class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
                     <i class="fas fa-cogs"></i>
                     <span>Services</span>

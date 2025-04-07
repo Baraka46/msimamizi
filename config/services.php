@@ -17,6 +17,9 @@ return [
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
+'scraper_api' => [
+    'url' => env('SCRAPER_API_URL'),
+],
 
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
