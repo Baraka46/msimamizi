@@ -19,7 +19,7 @@
         <!-- Logo Section -->
          <div>
         <div class="logo mb-10">
-            <h2 class="text-3xl font-bold text-center">msiamizi</h2>
+            <h2 class="text-3xl font-bold text-center">CVMS</h2>
        
 
         <!-- User Profile (Optional) -->
