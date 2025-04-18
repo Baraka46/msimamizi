@@ -1,0 +1,16 @@
+[phases.setup]
+nixpkgsArchive = "https://github.com/NixOS/nixpkgs/archive/nixpkgs-23.11-darwin.tar.gz"
+
+[phases.install]
+cmds = ["npm install"]
+
+[phases.build]
+cmds = [
+  "composer install --optimize-autoloader",
+  "npm run build",
+  "php artisan config:cache",
+  "php artisan migrate --force"
+]
+
+[start]
+cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"
