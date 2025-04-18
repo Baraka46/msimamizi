@@ -608,6 +608,7 @@ class ComposerStaticInitdd14a52e7beaa75f2eca5e673b1f2b2e
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\FortifyServiceProvider' => __DIR__ . '/../..' . '/app/Providers/FortifyServiceProvider.php',
         'App\\Providers\\JetstreamServiceProvider' => __DIR__ . '/../..' . '/app/Providers/JetstreamServiceProvider.php',
+        'App\\Services\\VehicleScraperService' => __DIR__ . '/../..' . '/app/Services/VehicleScraperService.php',
         'App\\View\\Components\\AppLayout' => __DIR__ . '/../..' . '/app/View/Components/AppLayout.php',
         'App\\View\\Components\\GuestLayout' => __DIR__ . '/../..' . '/app/View/Components/GuestLayout.php',
         'App\\View\\Components\\Sidebar' => __DIR__ . '/../..' . '/app/View/Components/Sidebar.php',
