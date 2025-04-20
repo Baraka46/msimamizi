@@ -1,4 +1,4 @@
-#!/home/munisi/Munisi/tms_scraper_service/venv/bin/python3
+#!/home/munisi/msimamizi/tms_scraper_service/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
