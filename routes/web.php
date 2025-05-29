@@ -32,7 +32,10 @@ Route::middleware(['auth'])->group(function () {
     // Car routes
     Route::resource('cars', CarController::class)->except('show');
     Route::get('/cars/create', [CarController::class, 'create'])->name('cars.create');
-    Route::get('/cars/scrape', [CarController::class, 'scrapeCars'])->name('cars.scrape');
+    Route::get('/cars/scrape/refresh', [CarController::class, 'fetchOffenceData'])->name('cars.scrape');
+        Route::get('/cars/scrape', [CarController::class, 'ShowOffense'])->name('offense.index');
+    Route::get('/ticket/{reference}', [CarController::class, 'showTicket'])->name('view.ticket');
+
     Route::get('cars/{id}', [CarController::class, 'show'])->name('cars.show'); // Show car details
     Route::get('cars/{id}/assign-supervisor', [CarController::class, 'assignSupervisorForm'])->name('cars.assign-supervisor');
 Route::patch('cars/{id}/assign-supervisor', [CarController::class, 'assignSupervisor'])->name('cars.update-supervisor');

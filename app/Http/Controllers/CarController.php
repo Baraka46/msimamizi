@@ -8,7 +8,7 @@ use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Models\CarGroup;
 use App\Models\GroupExpense;
-use App\Services\VehicleScraperService;
+use App\Services\VehicleOffenceCheckerService;
 use Illuminate\Support\Facades\Auth;
 
 class CarController extends Controller
@@ -177,15 +177,12 @@ public function GroupStore(Request $request)
         'car_ids.*' => 'exists:cars,id', // Validate that each ID exists in the cars table
         'description' => 'nullable|string|max:255',
     ]);
-
-    // Step 1: Create the CarGroup first
     $carGroup = CarGroup::create([
         'name' => $request->name,
         'description' => $request->description,
         'company_id' => $companyId,
     ]);
 
-    // Step 2: Assign the group ID to the selected cars
     Car::whereIn('id', $request->car_ids)->update(['car_group_id' => $carGroup->id]);
 
     return redirect()->route('GroupIndex.index')->with('success', 'Group created and cars assigned successfully!');
@@ -203,23 +200,18 @@ public function GroupIndex(Request $request)
     } elseif ($user->isSupervisor()) {
         $carGroups = CarGroup::whereHas('cars', function ($query) use ($user) {
             $query->where('assigned_supervisor_id', $user->id);
-        })->with(['cars', 'groupExpenses']) // Load both relationships
+        })->with(['cars', 'groupExpenses'])
         ->get();
     } else {
-        $carGroups = collect(); // No groups if the role doesn't match
+        $carGroups = collect();
     }
 
     return view('components.cars.group-index', compact('carGroups'));
 }
 
-    
-    // Add this new function to your CarController:
-    public function scrapeCars(VehicleScraperService $scraper, Request $request)
+    public function fetchOffenceData(VehicleOffenceCheckerService $scraper, Request $request)
     {
         $user = Auth::user();
-      
-    
-        // Build the query based on user role:
         $carsQuery = Car::query();
         
         
@@ -228,14 +220,11 @@ public function GroupIndex(Request $request)
         } elseif ($user->isOwner()) {
             $carsQuery->where('company_id', $user->company_id);
         } elseif ($user->isAdmin()) {
-            // Admin sees all cars – no additional filtering required.
         } else {
             abort(403, 'Unauthorized action');
         }
     
         $cars = $carsQuery->get();
-    
-        // Clean up plate numbers: remove spaces and convert to lowercase.
         $plates = $cars->pluck('plate_number')
                        ->map(function ($plate) {
                            return strtolower(str_replace(' ', '', $plate));
@@ -247,16 +236,43 @@ public function GroupIndex(Request $request)
                       
     
         try {
-            // Call your FastAPI scraper service to process the plate numbers.
-            $results = $scraper->scrapePlates($plates);
-            // Pass the scraped results to a Blade view.
-            
-            return view('components.cars.scraped', compact('results'));
+            $results = $scraper->fetchOffences($plates);
+            // dd($results);
+
+            session(['scraped_results' => $results]);
+
+              return redirect()->route('offense.index')->with('success', 'Data refreshed successfully!');
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors($e->getMessage());
+            return redirect()->route('offense.index')->withErrors($e->getMessage());
         }
     }
-    
+
+    public function showOffense()
+{
+    $results = session('scraped_results');
+
+    if (!$results) {
+        return redirect()->route('cars.scrape'); 
+    }
+
+    return view('components.cars.scraped', compact('results'));
+}
+
+    public function showTicket($reference)
+{
+    $results = session('scraped_results', []);
+    $allOffenses = collect($results)->flatMap(function ($item) {
+        return $item['pending_transactions'] ?? [];
+    });
+    $ticket = $allOffenses->firstWhere('reference', $reference);
+
+    if (!$ticket) {
+        abort(404, 'Ticket not found or session expired.');
+    }
+
+    return view('components.cars.ticketShow', compact('ticket'));
+}
+
 
 
 }

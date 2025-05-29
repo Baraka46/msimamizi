@@ -19,58 +19,55 @@
          
         @livewireStyles
     </head>
-    <body class="font-sans antialiased">
-        <script>
-function toggleDropdown(event, dropdownId) {
-    event.preventDefault();
-    const dropdown = document.getElementById(dropdownId);
-    if (dropdown) {
+ <body class="font-sans antialiased"  x-data="{ isSidebarOpen: window.innerWidth >= 1024 }">
+  <script>
+    function toggleDropdown(event, dropdownId) {
+      event.preventDefault();
+      const dropdown = document.getElementById(dropdownId);
+      if (dropdown) {
         dropdown.classList.toggle('hidden');
+      }
     }
-}
+  </script>
 
+  <x-banner />
 
-        </script>
+  <div class="min-h-screen">
+ @include('components.topbar')
 
-        <x-banner />
+  <div class="min-h-screen">
+ 
 
-        <div class="min-h-screen">
-            @livewire('navigation-menu')
-
-            <!-- Page Layout -->
-            <div class="flex">
-                <!-- Sidebar -->
-                <div class="w-50 md:w-64 bg-gray-100 text-white h-screen">
-    @switch(Auth::user()->role)
-        @case('owner')
+    <!-- Page Layout -->
+    <div class="flex flex-nowrap">    <!-- prevent wrapping -->
+      <!-- Sidebar -->
+      <div class="w-50 md:w-64 flex-shrink-0 bg-gray-100 text-white h-screen"
+      
+      >
+        @switch(Auth::user()->role)
+          @case('owner')
             @include('components.ownerSidebar')
             @break
-
-        @case('supervisor')
+          @case('supervisor')
             @include('components.supervisorSidebar')
             @break
-
-            @case('user')
+          @case('user')
             @include('components.userSidebar')
             @break
-
-
-        @case('admin')
+          @case('admin')
             @include('components.adminSidebar')
             @break
-    @endswitch
-</div>
+        @endswitch
+      </div>
 
+      <!-- Main Content -->
+      <main class="flex-1 p-6 mt-4 min-w-0 overflow-auto break-words">
+        {{ $slot }}
+      </main>
+    </div>
+  </div>
 
-                <!-- Main Content -->
-                <main class="flex-1 p-6 mt-4">
-                    {{ $slot }} 
-                </main>
-            </div>
-        </div>
+  @stack('modals')
 
-        @stack('modals')
-
-        @livewireScripts
-    </body>
-</html>
+  @livewireScripts
+</body>

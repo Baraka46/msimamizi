@@ -1,14 +1,10 @@
 <!-- Sidebar Section -->
-<div x-data="{ isSidebarOpen: window.innerWidth >= 1024 }" class="relative">
+<div >
     <!-- Sidebar Button (Visible only on small screens) -->
     <div 
         :class="isSidebarOpen ? 'lg:hidden absolute top-4 left-64' : 'lg:hidden absolute top-4 left-4'" 
         class="transition-all duration-300 ease-in-out z-50">
-        <button 
-            @click="isSidebarOpen = !isSidebarOpen" 
-            class="text-black p-3 rounded-full">
-            <i :class="isSidebarOpen ? 'fas fa-times' : 'fas fa-bars'" class="text-2xl"></i>
-        </button>
+   
     </div>
 
     <!-- Sidebar -->
@@ -22,50 +18,8 @@
             <h2 class="text-3xl font-bold text-center">CVMS</h2>
        
 
-        <!-- User Profile (Optional) -->
-        <!-- <nav x-data="{ showProfileMenu: false }" class="bg-blue-400 p-4 w-200 rounded-lg shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-            
-            <div class="flex items-center space-x-4">
-               
-                <img 
-                    src="https://via.placeholder.com/50" 
-                    alt="Profile Picture" 
-                    class="rounded-full w-12 h-12 cursor-pointer" 
-                    @click="showProfileMenu = !showProfileMenu">
+       
 
-              
-                <div 
-                    class="flex flex-col cursor-pointer" 
-                    @click="showProfileMenu = !showProfileMenu">
-                    <p class="font-semibold text-base truncate w-[150px] sm:w-auto">
-                        {{ Auth::user()->name }}
-                    </p>
-                    <p class="text-sm">
-                        {{ Auth::user()->role }}
-                    </p>
-                </div>
-            </div>
-
-           
-            <div 
-                x-show="showProfileMenu" 
-                @click.outside="showProfileMenu = false" 
-                class="absolute left-4 bg-white border border-gray-200 rounded-md shadow-lg z-50 w-48 mt-16">
-                <x-dropdown-link href="{{ route('profile.show') }}">
-                    {{ __('Profile') }}
-                </x-dropdown-link>
-                <form method="POST" action="{{ route('logout') }}" x-data>
-                    @csrf
-                    <x-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
-                        {{ __('Log Out') }}
-                    </x-dropdown-link>
-                </form>
-            </div>
-        </div>
-    </div>
-</nav> -->
 </div>
 
         <!-- Sidebar Navigation Links -->
@@ -123,7 +77,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('cars.scrape') }}" class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
+                <a href="{{ route('offense.index') }}" class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
                     <i class="fas fa-chart-line"></i>
                     <span>Ticket</span>
                 </a>
