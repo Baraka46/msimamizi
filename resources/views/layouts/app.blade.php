@@ -34,10 +34,15 @@
 
   <div class="min-h-screen">
  @include('components.topbar')
-
+<div class="pt-16"></div>
   <div class="min-h-screen">
  
-
+ <div
+      x-show="isSidebarOpen"
+      @click="isSidebarOpen = false"
+      class="fixed inset-0 bg-black bg-opacity-25 z-40 lg:hidden"
+      x-transition.opacity
+    ></div>
     <!-- Page Layout -->
     <div class="flex flex-nowrap">    <!-- prevent wrapping -->
       <!-- Sidebar -->

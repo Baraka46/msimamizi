@@ -1,10 +1,10 @@
 <!-- Sidebar Section -->
-<div >
+<div class="relative">
     <!-- Sidebar Button (Visible only on small screens) -->
     <div 
-        :class="isSidebarOpen ? 'lg:hidden absolute top-4 left-64' : 'lg:hidden absolute top-4 left-4'" 
-        class="transition-all duration-300 ease-in-out z-50">
-   
+       :class="isSidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+      class="fixed bg-blue-800 text-white w-64 h-full p-5 flex flex-col justify-between transition-transform duration-300 ease-in-out lg:translate-x-0 z-30">
+        
     </div>
 
     <!-- Sidebar -->
@@ -16,8 +16,6 @@
          <div>
         <div class="logo mb-10">
             <h2 class="text-3xl font-bold text-center">CVMS</h2>
-       
-
        
 
 </div>
