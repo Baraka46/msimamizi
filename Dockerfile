@@ -1,4 +1,3 @@
-
 FROM richarvey/nginx-php-fpm:latest
 
 # Install Node.js, npm, and Composer
@@ -29,9 +28,7 @@ EXPOSE 80
 
 # Run Laravel setup before boot
 RUN composer install --no-dev --optimize-autoloader && \
-    php artisan key:generate && \
+    php artisan key:generate
 
-
-# Start nginx + php-fpm
+# ✅ Correct placement of CMD — OUTSIDE RUN
 CMD ["/start.sh"]
-
