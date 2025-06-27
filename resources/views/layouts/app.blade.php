@@ -34,7 +34,7 @@
 
   <div class="min-h-screen">
  @include('components.topbar')
-<div class="pt-16"></div>
+
   <div class="min-h-screen">
  
  <div
