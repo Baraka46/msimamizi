@@ -53,8 +53,7 @@ EXPOSE 80
 # Run Laravel setup before boot
 RUN composer install --no-dev --optimize-autoloader && \
     php artisan key:generate && \
-    php artisan config:cache && \
-    php artisan route:cache
+
 
 # Start nginx + php-fpm
 CMD ["/start.sh"]
