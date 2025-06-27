@@ -29,7 +29,11 @@ ENV RUN_SCRIPTS=1 \
     REAL_IP_HEADER=1 \
     COMPOSER_ALLOW_SUPERUSER=1
 
+  
+    COPY docker/php.ini /etc/php8/conf.d/99-custom.ini
 EXPOSE 80
+
+
 
 # ✅ This is the only CMD — and it's in the correct position
 CMD ["/start.sh"]
