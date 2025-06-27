@@ -8,14 +8,20 @@ RUN apk update && apk add --no-cache nodejs npm && \
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy application code
+# Copy app files
 COPY . .
 
-# Copy custom scripts (optional, if you have them)
+# Copy and make any custom scripts executable
 COPY scripts/ /scripts/
 RUN chmod +x /scripts/*.sh || true
 
-# Set environment variables
+# Copy .env.example to prevent artisan errors during build
+RUN cp .env.example .env
+
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Environment variables (Render will override these at runtime)
 ENV RUN_SCRIPTS=1 \
     SKIP_COMPOSER=0 \
     WEBROOT=/var/www/html/public \
@@ -23,11 +29,7 @@ ENV RUN_SCRIPTS=1 \
     REAL_IP_HEADER=1 \
     COMPOSER_ALLOW_SUPERUSER=1
 
-# Expose HTTP port
 EXPOSE 80
 
-# Run Laravel setup before boot
-RUN composer install --no-dev --optimize-autoloader && \
-  
-# ✅ Correct placement of CMD — OUTSIDE RUN
+# ✅ This is the only CMD — and it's in the correct position
 CMD ["/start.sh"]
