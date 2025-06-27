@@ -30,7 +30,7 @@ ENV RUN_SCRIPTS=1 \
     COMPOSER_ALLOW_SUPERUSER=1
 
   
-    COPY docker/php.ini /etc/php8/conf.d/99-custom.ini
+   COPY docker/php-memory.ini /etc/php8/conf.d/99-memory-limit.ini
 EXPOSE 80
 
 
