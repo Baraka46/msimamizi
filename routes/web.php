@@ -57,6 +57,9 @@ Route::resource('expenses.contributions', ContributionController::class);
 
 // web.php
 
+Route::get('/foo', function () {
+    return 'FOO WORKS';
+});
 
 
 
