@@ -10,39 +10,40 @@ class CarsTableSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
-        DB::table('cars')->insert([
-            [
-                'company_id' => 1, // Ensure this matches a valid company ID in the companies table
-                'plate_number' => 'T123ABC',
-                'model' => 'Toyota HiAce',
-                'route' => 'Dar es Salaam - Morogoro',
-                'daily_hesabu_target' => 50000.00,
-                'assigned_supervisor_id' => 3, // Ensure this matches a valid supervisor ID in the users table
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'company_id' => 2,
-                'plate_number' => 'T456DEF',
-                'model' => 'Nissan Caravan',
-                'route' => 'Arusha - Moshi',
-                'daily_hesabu_target' => 70000.00,
-                'assigned_supervisor_id' => null, // No supervisor assigned
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'company_id' => 3,
-                'plate_number' => 'T789GHI',
-                'model' => 'Ford Transit',
-                'route' => 'Mbeya - Iringa',
-                'daily_hesabu_target' => 60000.00,
-                'assigned_supervisor_id' => 2,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+   public function run(): void
+{
+    $now = now();
+    $cars = [];
+
+    // Generate 7 cars with supervisor_id = 3
+    for ($i = 1; $i <= 7; $i++) {
+        $cars[] = [
+            'company_id' => 1,
+            'plate_number' => 'T' . rand(100, 999) . chr(rand(65, 90)) . chr(rand(65, 90)) . chr(rand(65, 90)),
+            'model' => 'Toyota HiAce',
+            'route' => 'Dar es Salaam - Morogoro',
+            'daily_hesabu_target' => 50000.00,
+            'assigned_supervisor_id' => 3,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ];
     }
+
+    // Generate 13 cars with supervisor_id = null
+    for ($i = 1; $i <= 13; $i++) {
+        $cars[] = [
+            'company_id' => 1,
+            'plate_number' => 'T' . rand(100, 999) . chr(rand(65, 90)) . chr(rand(65, 90)) . chr(rand(65, 90)),
+            'model' => 'Nissan Caravan',
+            'route' => 'Dar es Salaam - Morogoro',
+            'daily_hesabu_target' => 50000.00,
+            'assigned_supervisor_id' => null,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ];
+    }
+
+    DB::table('cars')->insert($cars);
+}
+
 }

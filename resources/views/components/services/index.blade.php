@@ -26,16 +26,25 @@
                             <tr>
                                 <td class="px-4 py-2">{{ ucfirst($service->service_type) }} service</td>
                                 <td class="px-4 py-2">{{ $service->date_performed->format('Y-m-d') }}</td>
+                                
                                 <td class="px-4 py-2">{{ $service->next_due_date->format('Y-m-d') }}</td>
                                 <td class="px-4 py-2">
-    @php
-        $daysLeft = $service->next_due_date->startOfDay()->diffInDays(now()->startOfDay(), false);
-    @endphp
-    @if ($daysLeft < 0)
-        <span class="text-black font-se"> {{ abs((int)$daysLeft) }} days</span>
-    @else
-        <span class="text-green-500">{{ (int)$daysLeft }} days left</span>
-    @endif
+ @php
+    $daysLeft = optional($service->next_due_date)
+        ? now()->startOfDay()->diffInDays($service->next_due_date->startOfDay(), false)
+        : null;
+@endphp
+
+    @if (is_null($daysLeft))
+    —
+@elseif ($daysLeft > 0)
+    <span class="text-green-600">{{ $daysLeft }} day(s) left</span>
+@elseif ($daysLeft === 0)
+    <span class="text-yellow-600">Due today</span>
+@else
+    <span class="text-red-600">Overdue by {{ abs($daysLeft) }} day(s)</span>
+@endif
+
 </td>
 
 <td class="px-4 py-2">

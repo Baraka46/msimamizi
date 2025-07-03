@@ -65,7 +65,7 @@ class ServiceController extends Controller
     public function edit(Service $service)
     {
         $assignedCars = Car::where('assigned_supervisor_id', auth()->id())->get(); // Only assigned cars
-        return view('services.edit', compact('service', 'assignedCars'));
+        return view('components.services.edit', compact('service', 'assignedCars'));
     }
 
     public function update(Request $request, Service $service)

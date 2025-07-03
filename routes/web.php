@@ -43,7 +43,7 @@ Route::get('cars/group/create',[CarController::class, 'GroupCreate'])->name('Gro
 Route::post('cars/group',[CarController::class, 'GroupStore'])->name('GroupStore.store');
 Route::get('cars/group/index',[CarController::class, 'GroupIndex'])->name('GroupIndex.index');
 
-// Route::resource('cars/group/expenses', GroupExpenseController::class)->shallow();
+Route::resource('cars/group/expenses', GroupExpenseController::class)->shallow();
 Route::get('/cars/group/expenses/create/{group}', [GroupExpenseController::class, 'create'])->name('expenses.create');
 Route::get('/cars/group/expenses/index/{group}', [GroupExpenseController::class, 'index'])->name('expenses.index');
 Route::resource('expenses.contributions', ContributionController::class);
@@ -99,6 +99,8 @@ Route::post('/maintenances/store-multiple', [MaintenanceController::class, 'stor
 Route::resource('in-house-maintenance', InHouseMaintenanceController::class);
 Route::post('/in-house-maintenance/store-multiple', [ InHouseMaintenanceController::class, 'storeMultiple'])->name('in-house-maintenances.storeMultiple');
 Route::post('/in-house-maintenance/payment', [ InHouseMaintenanceController::class,'makePayment'])->name('makePayment');
+Route::get('/cars/group/expenses/create/{group}', [GroupExpenseController::class, 'create'])->name('expenses.create');
+Route::get('/cars/group/expenses/index/{group}', [GroupExpenseController::class, 'index'])->name('expenses.index');
 
 
 
