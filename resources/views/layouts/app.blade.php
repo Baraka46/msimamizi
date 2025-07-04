@@ -16,7 +16,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <!-- Styles -->
-         
+         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
         @livewireStyles
     </head>
  <body class="font-sans antialiased"  x-data="{ isSidebarOpen: window.innerWidth >= 1024 }">
@@ -33,7 +35,7 @@
   <x-banner />
 
   <div class="min-h-screen">
- @include('components.topbar')
+ <!-- @include('components.topbar') -->
 
   <div class="min-h-screen">
  

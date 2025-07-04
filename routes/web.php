@@ -89,6 +89,8 @@ Route::middleware(['web'])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/daily-hesabu', [DailyHesabuController::class, 'index'])->name('daily-hesabu.index');
     Route::post('/daily-hesabu', [DailyHesabuController::class, 'store'])->name('daily-hesabu.store');
+    Route::put('daily-hesabu/{dailyHesabu}', [DailyHesabuController::class, 'update'])->name('daily-hesabu.update');
+
 });
 
 

@@ -10,29 +10,20 @@ use Illuminate\Support\Carbon;
 
 class DailyHesabuController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+   
     public function index()
 {
-    // Get the current date
+  
     $today = Carbon::today();
-
-    // Get the logged-in supervisor's ID
     $supervisorId = auth()->user()->id;
     $weekly =Car::where('assigned_supervisor_id', $supervisorId)
         ->with('dailyHesabus')
         ->get();
-
-
-    // Cars assigned to the supervisor that have not been filled today
     $unfilledCars = Car::where('assigned_supervisor_id', $supervisorId)
         ->whereDoesntHave('dailyHesabus', function ($query) use ($today) {
             $query->whereDate('collection_time', $today);
         })
         ->get();
-
-    // Cars assigned to the supervisor that have been filled today
     $filledCars = Car::where('assigned_supervisor_id', $supervisorId)
         ->whereHas('dailyHesabus', function ($query) use ($today) {
             $query->whereDate('collection_time', $today);
@@ -41,8 +32,6 @@ class DailyHesabuController extends Controller
             $query->whereDate('collection_time', $today);
         }])
         ->get();
-
-    // Pass the data to the view
     return view('components.hesabu.addHesabu', [
         'unfilledCars' => $unfilledCars,
         'filledCars' => $filledCars,
@@ -114,10 +103,28 @@ public function store(Request $request)
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, DailyHesabu $dailyHesabu)
-    {
-        //
+public function update(Request $request, DailyHesabu $dailyHesabu)
+{
+    $request->validate([
+        'amount' => 'required|numeric|min:0',
+        'description' => 'nullable|string|max:255',
+    ]);
+
+    $car = $dailyHesabu->car;
+    $target = $car->daily_hesabu_target;
+
+    if (auth()->id() !== $dailyHesabu->supervisor_id) {
+        return response()->json(['error' => 'Unauthorized'], 403);
     }
+
+    $dailyHesabu->update([
+        'amount' => $request->amount,
+        'description' => $request->amount < $target ? $request->description : null,
+    ]);
+
+    return response()->json(['success' => true]);
+}
+
 
     /**
      * Remove the specified resource from storage.
