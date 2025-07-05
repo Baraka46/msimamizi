@@ -133,15 +133,18 @@
           <ul class="space-y-2">
             @foreach($car->maintenances as $m)
               <li class="p-2 border rounded-md flex justify-between items-center">
-                <span>{{ $m->type }} on {{ $m->performed_at->format('Y-m-d') }}</span>
+                <span>{{ $m->description }} ({{ \Illuminate\Support\Carbon::parse($m->date)->format('Y-m-d') }})</span>
                 <a href="{{ route('maintenances.show', $m->id) }}"
                    class="text-blue-500 hover:underline text-sm">View</a>
               </li>
             @endforeach
             @foreach($car->inhouse_maintenance as $m)
               <li class="p-2 border rounded-md flex justify-between items-center">
-                <span>In‑house: {{ $m->description }} ({{ $m->date->format('Y-m-d') }})</span>
-                <a href="{{ route('inhouse-maintenance.show', $m->id) }}"
+                <span>
+  In‑house: {{ $m->description }} ({{ \Illuminate\Support\Carbon::parse($m->date)->format('Y-m-d') }})
+</span>
+
+                <a href="{{ route('in-house-maintenance.show', $m->id) }}"
                    class="text-blue-500 hover:underline text-sm">View</a>
               </li>
             @endforeach

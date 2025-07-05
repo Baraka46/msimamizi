@@ -28,29 +28,26 @@
                             <th class="px-4 py-2">Action</th>  
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach($cars as $index => $car)
                            <tbody>
-@foreach($cars as $index => $car)
-  <tr class="border-b hover:bg-gray-50">
-    <td class="px-4 py-2">{{ $index + 1 }}</td>
-    <td class="px-4 py-2">{{ $car->plate_number }}</td>
-    <td class="px-4 py-2">{{ $car->model ?? 'N/A' }}</td>
-    <td class="px-4 py-2">{{ $car->route }}</td>
-    <td class="px-4 py-2">{{ number_format($car->daily_hesabu_target) }}</td>
-    <td class="px-4 py-2">
-      <a href="{{ route('cars.show', $car->id) }}"
-         class="inline-block bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-        View
-      </a>
-    </td>
-  </tr>
-@endforeach
-</tbody>
+                                @foreach($cars as $index => $car)
+                                  <tr class="border-b hover:bg-gray-50">
+                                    <td class="px-4 py-2">{{ $index + 1 }}</td>
+                                    <td class="px-4 py-2">{{ $car->plate_number }}</td>
+                                    <td class="px-4 py-2">{{ $car->model ?? 'N/A' }}</td>
+                                    <td class="px-4 py-2">{{ $car->route }}</td>
+                                    <td class="px-4 py-2">{{ number_format($car->daily_hesabu_target) }}</td>
+                                    <td class="px-4 py-2">
+                                      <a href="{{ route('cars.show', $car->id) }}"
+                                        class="inline-block bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                                        View
+                                      </a>
+                                    </td>
+                                  </tr>
+                                @endforeach
+                                </tbody>
 
-                        @endforeach
-                    </tbody>
                 </table>
+                   
 
                 <!-- Cards for Small Screens -->
                <div class="sm:hidden">
