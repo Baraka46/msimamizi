@@ -65,4 +65,11 @@ class Car extends Model
     {
         return $this->hasOne(CarGroup::class);
     }
+
+
+
+
+    
 }
+
+

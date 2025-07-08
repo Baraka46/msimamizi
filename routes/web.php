@@ -36,7 +36,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/cars/scrape', [CarController::class, 'ShowOffense'])->name('offense.index');
     Route::get('/ticket/{reference}', [CarController::class, 'showTicket'])->name('view.ticket');
 
-    Route::get('cars/{id}', [CarController::class, 'show'])->name('cars.show'); // Show car details
+    Route::get('cars/{car}', [CarController::class, 'show'])->name('cars.show'); // Show car details
     Route::get('cars/{id}/assign-supervisor', [CarController::class, 'assignSupervisorForm'])->name('cars.assign-supervisor');
 Route::patch('cars/{id}/assign-supervisor', [CarController::class, 'assignSupervisor'])->name('cars.update-supervisor');
 Route::get('cars/group/create',[CarController::class, 'GroupCreate'])->name('GroupCreate.create');

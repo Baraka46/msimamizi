@@ -82,11 +82,20 @@ class CarController extends Controller
     /**
      * Show the details of a specific car
      */
-    public function show($id)
+public function show(Car $car)
 {
-    $car = Car::findOrFail($id); // Fetch the car by ID
-    return view('components.cars.show', compact('car'));
+    $car->load(['maintenances', 'inhouse_maintenance']);
+    $external = $car->maintenances
+                    ->sortByDesc('date')
+                    ->values();
+
+    $inhouse  = $car->inhouse_maintenance
+                    ->sortByDesc('date')
+                    ->values();
+    return view('components.cars.show', compact('car','external','inhouse'));
 }
+
+
 public function assignSupervisorForm($id)
 {
     $car = Car::findOrFail($id);

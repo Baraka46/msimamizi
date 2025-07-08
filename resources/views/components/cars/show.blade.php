@@ -126,31 +126,60 @@
       </div>
 
       <!-- Maintenance Pane -->
-      <div x-show="tab === 'maintenance'" class="pt-6">
-        @if($car->maintenances->isEmpty() && $car->inhouse_maintenance->isEmpty())
-          <p class="text-gray-500">No maintenance records yet.</p>
-        @else
-          <ul class="space-y-2">
-            @foreach($car->maintenances as $m)
-              <li class="p-2 border rounded-md flex justify-between items-center">
-                <span>{{ $m->description }} ({{ \Illuminate\Support\Carbon::parse($m->date)->format('Y-m-d') }})</span>
-                <a href="{{ route('maintenances.show', $m->id) }}"
-                   class="text-blue-500 hover:underline text-sm">View</a>
-              </li>
-            @endforeach
-            @foreach($car->inhouse_maintenance as $m)
-              <li class="p-2 border rounded-md flex justify-between items-center">
-                <span>
-  In‑house: {{ $m->description }} ({{ \Illuminate\Support\Carbon::parse($m->date)->format('Y-m-d') }})
-</span>
+      <div x-show="tab === 'maintenance'" class="pt-6 space-y-6">
 
-                <a href="{{ route('in-house-maintenance.show', $m->id) }}"
-                   class="text-blue-500 hover:underline text-sm">View</a>
-              </li>
-            @endforeach
-          </ul>
-        @endif
-      </div>
+  {{-- External Maintenance Section --}}
+  <div>
+    <h3 class="text-lg font-semibold text-gray-800 mb-2">External Maintenance</h3>
+
+    @if($external->isEmpty())
+      <p class="text-gray-500">No external maintenance records yet.</p>
+    @else
+      <ul class="space-y-2">
+        @foreach($external as $m)
+          <li class="p-2 border rounded-md flex justify-between items-center">
+            <span>
+              {{ $m->description }}
+              {{ $m->expense_name ? '' . $m->expense_name   . '' : '' }} 
+              {{ \Illuminate\Support\Carbon::parse($m->date)->format('Y-m-d') }}
+            </span>
+            <a href="{{ route('maintenances.show', $m->id) }}"
+               class="text-blue-500 hover:underline text-sm">
+              View
+            </a>
+          </li>
+        @endforeach
+      </ul>
+    @endif
+  </div>
+
+  {{-- In‑House Maintenance Section --}}
+  <div>
+    <h3 class="text-lg font-semibold text-gray-800 mb-2">In‑House Maintenance</h3>
+
+    @if($inhouse->isEmpty())
+      <p class="text-gray-500">No in‑house maintenance records yet.</p>
+    @else
+      <ul class="space-y-2">
+        @foreach($inhouse as $m)
+          <li class="p-2 border rounded-md flex justify-between items-center">
+            <span>
+              {{ $m->description }}
+                {{ $m->item_name }}
+              {{ \Illuminate\Support\Carbon::parse($m->date)->format('Y-m-d') }}
+            </span>
+            <a href="{{ route('in-house-maintenance.show', $m->id) }}"
+               class="text-blue-500 hover:underline text-sm">
+              View
+            </a>
+          </li>
+        @endforeach
+      </ul>
+    @endif
+  </div>
+
+</div>
+
 
       <!-- Services Pane -->
       <div x-show="tab === 'services'" class="pt-6">
