@@ -27,7 +27,6 @@ class MaintenanceController extends Controller
     {
         $cars = Car::where('assigned_supervisor_id', Auth::id())->get();
 
-        // If no cars are assigned, redirect with a message
         if ($cars->isEmpty()) {
             return redirect()->route('dashboard')->with('info', 'No cars are assigned to you.');
         }
@@ -41,28 +40,27 @@ class MaintenanceController extends Controller
             'expenses' => 'required|array',
             'expenses.*.expense_name' => 'required|string|max:255',
             'expenses.*.cost' => 'required|numeric|min:0',
-            'expenses.*.amount_paid' => 'nullable|numeric|min:0', // Change this field name to match 'amount_paid'
+            'expenses.*.amount_paid' => 'nullable|numeric|min:0', 
             'expenses.*.description' => 'nullable|string',
             'expenses.*.date' => 'required|date',
-            'expenses.*.payment_status' => 'required|in:paid,installment', // Add validation for payment status
+            'expenses.*.payment_status' => 'required|in:paid,installment', 
         ]);
     
         foreach ($validated['expenses'] as $expense) {
-            // Determine outstanding balance and initial payment
+            
             $outstandingBalance = $expense['cost'];
-            $initialPayment = 0; // Default to 0
+            $initialPayment = 0;
     
             if ($expense['payment_status'] === 'paid') {
-                // Fully paid
-                $outstandingBalance = 0; // No balance remaining
-                $initialPayment = $expense['cost']; // Full payment
+               
+                $outstandingBalance = 0; // 
+                $initialPayment = $expense['cost']; 
             } elseif ($expense['payment_status'] === 'installment' && isset($expense['amount_paid'])) {
-                // Partial payment
-                $outstandingBalance -= $expense['amount_paid']; // Deduct initial payment
-                $initialPayment = $expense['amount_paid']; // Initial payment amount
+                
+                $outstandingBalance -= $expense['amount_paid']; 
+                $initialPayment = $expense['amount_paid']; 
             }
     
-            // Create the maintenance entry
             $maintenance = Maintenance::create([
                 'car_id' => $validated['car_id'],
                 'expense_name' => $expense['expense_name'],
@@ -73,11 +71,11 @@ class MaintenanceController extends Controller
                 'payment_status' => $expense['payment_status'],
             ]);
     
-            // Record the payment in the payments table
+           
             if ($initialPayment > 0) {
                 $maintenance->payments()->create([
                     'amount' => $initialPayment,
-                    'payment_date' => now(), // You can replace this with `$expense['date']` if needed
+                    'payment_date' => now(), 
                 ]);
             }
         }
@@ -96,17 +94,15 @@ class MaintenanceController extends Controller
         'payment_date' => 'required|date',
     ]);
 
-    // Record the payment in the maintenance_payments table
     MaintenancePayment::create([
         'maintenance_id' => $maintenance->id,
         'amount' => $validated['amount'],
         'payment_date' => $validated['payment_date'],
     ]);
 
-    // Deduct the payment from the outstanding balance
     $maintenance->outstanding_balance -= $validated['amount'];
     if ($maintenance->outstanding_balance <= 0) {
-        $maintenance->outstanding_balance = 0; // Ensure it doesn't go negative
+        $maintenance->outstanding_balance = 0; 
     }
     $maintenance->save();
 
