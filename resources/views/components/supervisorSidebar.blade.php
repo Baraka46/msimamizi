@@ -118,10 +118,35 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('offense.index') }}" class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Ticket</span>
+                <a href="#" 
+                onclick="toggleDropdown(event, 'government-dropdown')" 
+       class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
+                
+                    <i class="fas fa-landmark"></i>
+                    <span>Government expenses</span>
+
                 </a>
+
+                <ul id="government-dropdown" class="hidden flex flex-col space-y-1 pl-8 mt-2">
+        <li>
+            <a href="{{route('offense.index')}}" 
+               class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
+              <i class="fas fa-coins mr-2"></i>
+<span>Traffic offense</span>
+
+
+
+            </a>
+        </li>
+        <li>
+            <a href="{{route('maintenances.index')}}" 
+               class="flex items-center px-4 py-2 hover:bg-blue-500 hover:text-white rounded-lg transition">
+                <i class="fas fa-parking mr-2"></i>
+<span>Parking fee</span>
+
+            </a>
+        </li>
+    </ul>
             </li>
             <li>
                 <a href="{{ route('services.index') }}" class="flex items-center space-x-3 hover:bg-blue-700 p-2 rounded-lg transition">
